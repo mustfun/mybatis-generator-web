@@ -1,0 +1,42 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>mybatis-generator-web-parent</artifactId>
+        <groupId>com.github.mustfun</groupId>
+        <version>1.0.0-SNAPSHOT</version>
+        <relativePath>../mybatis-generator-web-parent/pom.xml</relativePath>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>mybatis-generator-web-service</artifactId>
+    <packaging>jar</packaging>
+
+    <name>mybatis-generator-web-service</name>
+    <url>mustfun.github.io</url>
+
+
+    <dependencies>
+        <dependency>
+            <groupId>com.github.mustfun</groupId>
+            <artifactId>mybatis-generator-web-support</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.mustfun</groupId>
+            <artifactId>mybatis-generator-web-config</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+
+        <!--依赖dao-->
+        <dependency>
+            <groupId>com.github.mustfun</groupId>
+            <artifactId>mybatis-generator-web-dao</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+
+
+
+    </dependencies>
+
+
+</project>

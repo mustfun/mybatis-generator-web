@@ -1,0 +1,56 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>mybatis-generator-web-parent</artifactId>
+        <groupId>com.github.mustfun</groupId>
+        <version>1.0.0-SNAPSHOT</version>
+        <relativePath>../mybatis-generator-web-parent/pom.xml</relativePath>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>mybatis-generator-web-biz</artifactId>
+    <packaging>jar</packaging>
+
+    <name>mybatis-generator-web-biz</name>
+    <url>http://www.biwan.com</url>
+
+    <properties>
+        <start-class>com.itar.soa.mybatis-generator-web.BootLauncher</start-class>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.github.mustfun</groupId>
+            <artifactId>mybatis-generator-web-business</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+    </dependencies>
+
+
+    <build>
+        <finalName>mybatis-generator-web-biz</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${springboot.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                        <configuration>
+                            <classifier>exec</classifier>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+
+</project>

@@ -1,0 +1,72 @@
+database:
+    druid:
+        druid:
+            name: Master
+    master:
+        druid:
+            connectionProperties: connectTimeout=3000;config.decrypt=true
+            driverClassName: com.mysql.jdbc.Driver
+            filters: stat,wall,config
+            initialSize: 3
+            maxActive: 15
+            maxWait: 30000
+            minEvictableIdleTimeMillis: 300000
+            minIdle: 2
+            password: bNVOqb7WKLX5Bjnw+LMv92taj25KOxDimXxILPQjw42wgv+1lHzOH8kr97xDwWdhpY67QuYCS7sWN4W46YbkFA==
+            testOnBorrow: false
+            testOnReturn: false
+            testWhileIdle: true
+            url: jdbc:mysql://127.0.0.1:3306/biwann?useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false
+            useUnfairLock: true
+            username: root
+            validationQuery: select 1
+            validationQueryTimeout: 2000
+    slave:
+        druid:
+            connectionProperties: connectTimeout=3000;config.decrypt=true
+            driverClassName: com.mysql.jdbc.Driver
+            filters: stat,wall,config
+            initialSize: 3
+            maxActive: 15
+            maxWait: 30000
+            minEvictableIdleTimeMillis: 300000
+            minIdle: 2
+            name: Slave
+            password: bNVOqb7WKLX5Bjnw+LMv92taj25KOxDimXxILPQjw42wgv+1lHzOH8kr97xDwWdhpY67QuYCS7sWN4W46YbkFA==
+            testOnBorrow: false
+            testOnReturn: false
+            testWhileIdle: true
+            url: jdbc:mysql://127.0.0.1:3306/biwann_slave?useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false
+            useUnfairLock: true
+            username: root
+            validationQuery: select 1
+            validationQueryTimeout: 2000
+logging:
+    level:
+        root: INFO
+mq:
+    name: Master
+mybatis:
+    config-location: classpath:mybatis/mybatis-config.xml
+    mapper-locations: classpath*:/mybatis/mapper/*Mapper.xml
+    type-aliases-package: com.github.mustfun.generator.dao.mapper #指定别名的包名
+    # type-handlers-package: com.github.mustfun.generator.dao.mapper #预处理sql用的包
+server:
+    port: 8080
+
+spring:
+  thymeleaf:
+   cache: false
+   prefix: classpath:/templates/
+   suffix: .html
+   encoding: UTF-8
+   content-type: text/html
+   mode: HTML
+  cache:
+   jcache:
+     config: classpath:ehcache.xml
+
+#关闭healthcheck
+endpoints:
+  health:
+      enabled: false

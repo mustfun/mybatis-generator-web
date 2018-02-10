@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!--http://www.mybatis.org/spring-boot-starter/mybatis-spring-boot-autoconfigure/ Configure这个参数
+        可以直接配置在spring boot application配置文件里面
+    -->
+    <settings>
+        <!-- 全局映射器启用缓存 -->
+        <setting name="cacheEnabled" value="true" />
+        <!-- 查询时，关闭关联对象即时加载以提高性能 -->
+        <setting name="lazyLoadingEnabled" value="true" />
+        <!-- 设置关联对象加载的形态，此处为按需加载字段(加载字段由SQL指 定)，不会加载关联表的所有字段，以提高性能 -->
+        <setting name="aggressiveLazyLoading" value="false" />
+        <!-- 对于未知的SQL查询，允许返回不同的结果集以达到通用的效果 -->
+        <setting name="multipleResultSetsEnabled" value="true" />
+        <!-- 允许使用列标签代替列名 -->
+        <setting name="useColumnLabel" value="true" />
+        <!-- 给予被嵌套的resultMap以字段-属性的映射支持 -->
+        <setting name="autoMappingBehavior" value="FULL" />
+        <!-- 数据库超过5分钟仍未响应则超时 -->
+        <setting name="defaultStatementTimeout" value="300" />
+        <!-- 允许插入 NULL -->
+        <setting name="jdbcTypeForNull" value="NULL" />
+        <!-- 一级缓存作用域，默认SESSION，即同一session中，相同的SQL语句只能执行一次。 -->
+        <!-- 当作用域改为STATEMENT时，同一session中，相同SQL可执行多次 -->
+        <!--
+            <setting name="localCacheScope" value="STATEMENT"/>
+        -->
+        <!-- 适用于3.3.0版本以上，类代理仍旧使用CGLIB而非默认的javassist -->
+        <setting name="proxyFactory" value="CGLIB"/>
+    </settings>
+</configuration>

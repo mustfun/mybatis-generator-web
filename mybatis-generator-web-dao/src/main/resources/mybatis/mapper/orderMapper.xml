@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.github.mustfun.generator.dao.mapper.OrderMapper" >
+    <resultMap id="BaseResultMap" type="com.github.mustfun.generator.model.po.Order" >
+        <id column="order_id" property="orderId" jdbcType="INTEGER" />
+        <result column="user_id" property="userId" jdbcType="INTEGER" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+
+        order_id, user_id, create_time
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select
+        <include refid="Base_Column_List" />
+        from t_order
+        where order_id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectByIdList" resultMap="BaseResultMap" parameterType="list">
+        select <include refid="Base_Column_List"/>
+        from t_order
+        WHERE order_id in
+
+        <foreach collection="list" item="item" open="(" close=")" separator=",">
+            ${item}
+        </foreach>
+    </select>
+
+</mapper>

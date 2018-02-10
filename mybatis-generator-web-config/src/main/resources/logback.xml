@@ -1,0 +1,68 @@
+<configuration>
+
+    <property name="appId" value="biwan" />
+
+
+    <property name="log.base" value="/home/logs/${appId}" />
+
+    <property name="pattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%X{LIP:-#}][%X{traceNo:-#}] &lt;%t&gt; %logger{80} :%msg%n" />
+
+    <property name="logstashPattern" value="[%level] [%date{ISO8601}] [%logger] [%thread] [%c] [%X{traceNo:-#}] [%X{LIP:-#}] %msg%n" />
+
+
+    <!-- 根输出节点 -->
+    <appender name="ROOT-APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.base}/biwan.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${log.base}/%d{yyyy-MM-dd}/root.%d{yyyy-MM-dd}-%i.log</fileNamePattern>
+            <maxHistory>90</maxHistory>
+            <TimeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <MaxFileSize>150MB</MaxFileSize>
+            </TimeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${pattern}</pattern>
+        </encoder>
+    </appender>
+
+
+    <!-- JDBC输出节点 -->
+    <appender name="JDBC-APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.base}/jdbc.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${log.base}/%d{yyyy-MM-dd}/jdbc.%d{yyyy-MM-dd}-%i.log</fileNamePattern>
+            <maxHistory>90</maxHistory>
+            <TimeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <MaxFileSize>150MB</MaxFileSize>
+            </TimeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${pattern}</pattern>
+        </encoder>
+    </appender>
+
+
+
+
+    <!--    <logger name="com.alibaba.druid.datasource" level="debug" additivity="false">
+        <appender-ref ref="JDBC-APPENDER"/>
+    </logger>
+
+
+    <!--生产用的连接和打印sql都可以关闭-->
+    <logger name="com.alibaba.druid.connection" level="off" additivity="false">
+        <appender-ref ref="JDBC-APPENDER"/>
+    </logger>
+
+
+
+
+
+
+    <!--    <root level="INFO">
+        <appender-ref ref="ROOT-APPENDER" />
+        <!--无效....-->
+        <appender-ref ref="JDBC-APPENDER" />
+    </root>
+
+</configuration>

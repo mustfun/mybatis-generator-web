@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--本地的时候配置文件会打印-->
+<configuration>
+	<property name="pattern" 
+        value="%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5level) [%magenta(%X{LIP:-#})][%yellow(%X{traceNo:-#})] &lt;%green(%t)&gt; %cyan(%logger{80}) :%msg%n" />
+	
+	<appender name="ROOT_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+		<withJansi>true</withJansi>
+		<encoder>
+			<pattern>${pattern}</pattern>
+		</encoder>
+	</appender>
+	
+	<logger name="com.github.mustfun.generator" level="debug" additivity="false">
+	 	<appender-ref ref="ROOT_CONSOLE"/>
+	</logger>
+
+	<!-- ORM -->
+
+	<!--默认logger名称 druid.sql.Datasource -->
+	<logger name="com.alibaba.druid.datasource" level="debug" additivity="false">
+		<appender-ref ref="ROOT_CONSOLE"/>
+	</logger>
+
+
+	<!--默认logger名称 druid.sql.Connection -->
+	<logger name="com.alibaba.druid.connection" level="debug" additivity="false">
+		<appender-ref ref="ROOT_CONSOLE"/>
+	</logger>
+
+	<!--默认logger名称 druid.sql.Statement -->
+	<logger name="com.alibaba.druid.statement" level="debug" additivity="false">
+		<appender-ref ref="ROOT_CONSOLE"/>
+	</logger>
+
+	<!--默认logger名称 druid.sql.resultset -->
+	<logger name="com.alibaba.druid.resultset" level="debug" additivity="false">
+		<appender-ref ref="ROOT_CONSOLE"/>
+	</logger>
+
+	<!-- slow log -->
+	<logger name="com.alibaba.druid.filter.stat.StatFilter" level="error" additivity="false">
+		<appender-ref ref="ROOT_CONSOLE"/>
+	</logger>
+
+	<logger name="org.apache.ibatis.logging.slf4j" level="debug" additivity="false">
+		<appender-ref ref="ROOT_CONSOLE" />
+	</logger>
+
+	<logger name="org.springframework.jdbc.datasource" level="debug" additivity="false">
+		<appender-ref ref="ROOT_CONSOLE" />
+	</logger>
+
+	<logger name="org.mybatis.spring.transaction" level="debug" additivity="false">
+		<appender-ref ref="ROOT_CONSOLE" />
+	</logger>
+
+
+	<!-- RESTFUL -->
+
+	<!-- REST INBOUND / OUTBOUND LOG-->
+
+
+	<root level="debug">
+		<appender-ref ref="ROOT_CONSOLE"/>
+	</root>
+</configuration>
