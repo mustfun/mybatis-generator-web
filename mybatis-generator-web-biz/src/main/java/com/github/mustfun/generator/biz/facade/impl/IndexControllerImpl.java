@@ -23,7 +23,7 @@ public class IndexControllerImpl implements IndexController {
     @Override
     @RequestMapping(value = "/index",method = RequestMethod.GET)
     public String index() {
-        return "index";
+        return "core/index";
     }
 
 

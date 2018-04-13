@@ -1,0 +1,73 @@
+﻿<!DOCTYPE >
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="common/receource">
+</head>
+
+<body>
+    <header th:include="common/header"></header>
+
+
+    <!-- START MAIN -->
+    <div id="main">
+        <!-- START WRAPPER -->
+        <div class="wrapper">
+
+            <aside th:include="common/sidebar"></aside>
+
+            <!-- START CONTENT -->
+            <section id="content">
+
+                <!--start container-->
+                <div class="container">
+                    <table class="striped bordered">
+                        <thead>
+                        <tr>
+                            <th data-field="id">Name</th>
+                            <th data-field="name">Item Name</th>
+                            <th data-field="price">Item Price</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>Alvin</td>
+                            <td>Eclair</td>
+                            <td>$0.87</td>
+                        </tr>
+                        <tr>
+                            <td>Alan</td>
+                            <td>Jellybean</td>
+                            <td>$3.76</td>
+                        </tr>
+                        <tr>
+                            <td>Jonathan</td>
+                            <td>Lollipop</td>
+                            <td>$7.00</td>
+                        </tr>
+                        <tr>
+                            <td>Shannon</td>
+                            <td>KitKat</td>
+                            <td>$9.99</td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+                <!--end container-->
+            </section>
+            <!-- END CONTENT -->
+
+            <aside th:include="common/rightSidebar"></aside>
+
+        </div>
+        <!-- END WRAPPER -->
+
+    </div>
+    <!-- END MAIN -->
+
+    <footer th:include="common/footer"></footer>
+
+    <div th:include="common/scripts"></div>
+</body>
+
+</html>
