@@ -143,6 +143,12 @@
                     <version>3.4.0</version>
                 </dependency>
 
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-thymeleaf</artifactId>
+                    <version>${springboot.version}</version>
+                </dependency>
+
                 <!-- https://mvnrepository.com/artifact/junit/junit -->
                 <dependency>
                     <groupId>junit</groupId>
@@ -156,7 +162,7 @@
 
 
     <properties>
-        <springboot.version>1.5.8.RELEASE</springboot.version>
+        <springboot.version>2.0.0.RELEASE</springboot.version>
         <junit.version>4.12</junit.version>
         <jdk.version>1.8</jdk.version>
     </properties>
