@@ -35,14 +35,13 @@
                         <tbody id="dbListId">
                         <!--/*@thymesVar id="config" type="com.github.mustfun.generator.model.po.DbConfigPo"*/-->
                         <tr th:each="table : ${tables}">
-                            <td th:text="${table.name}"></td>
+                            <td th:text="${table.tableName}"></td>
                             <td>
                                 <p>
-                                    <input type="checkbox" class="filled-in" th:value="${table.name}" th:name="checked-table-name" th:id="${table.name}+id">
-                                    <label  th:for="${table.name}+id">选择这个</label>
+                                    <input type="checkbox" class="filled-in" th:value="${table.tableName}" th:name="checked-table-name" th:id="${table.tableName}+id">
+                                    <label  th:for="${table.tableName}+id">选择这个</label>
                                 </p>
                             </td>
-                            <input type="hidden" th:value="${table.toString()}">
                         </tr>
                         </tbody>
                     </table>
@@ -106,24 +105,19 @@
                 tableName=tableName+this.value+",";
             }
         });
-        $.ajax({
+        window.location.href="/api/generate_code?tableName="+encodeURIComponent(tableName)+"&address="+$("#addressId").val();
+        /*$.ajax({
             url:"/api/generate_code?tableName="+encodeURIComponent(tableName)+"&address="+$("#addressId").val(),
             type:'GET', //GET
             async:true,    //或false,是否异步
             contentType:"application/x-www-form-urlencoded",
-            dataType : "json",
             success:function(data,textStatus,jqXHR){
-                if(data['status']=="0"){
-                    alert("成功生成");
 
-                }else{
-                    alert(data['message']);
-                }
             },
             error:function(xhr,textStatus){
                 alert("请求创建失败，请联系开发人员");
             }
-        })
+        })*/
     }
 
 

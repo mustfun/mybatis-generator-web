@@ -20,9 +20,9 @@ public interface ${className}Service {
 	
 	int queryTotal(Map<String, Object> map);
 	
-	void save(${className}Entity ${classname});
+	void save(${className}Entity ${classLittleName});
 	
-	void update(${className}Entity ${classname});
+	void update(${className}Entity ${classLittleName});
 	
 	void delete(${pk.attrType} ${pk.attrname});
 	

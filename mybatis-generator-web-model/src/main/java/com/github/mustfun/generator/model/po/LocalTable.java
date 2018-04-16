@@ -16,6 +16,7 @@ import java.util.List;
 public class LocalTable {
     private Integer id;
     private String tableName;
+    private String tableType;
     private String comment;
     private String className;
     private String classLittleName;

@@ -12,6 +12,7 @@ import com.github.mustfun.generator.support.util.DbUtil;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
@@ -48,14 +49,6 @@ public class ExtApiServiceImpl implements ExtApiService {
             baseResult.setMessage("数据库连接失败");
             return baseResult;
         }
-        List<String> columnNameList = new ArrayList<>();
-        getTables(connection);
-        try {
-            DatabaseMetaData metaData = connection.getMetaData();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
         ConnectionHolder.addConnection(configPo.getAddress(),connection);
         //保存到文件中
         saveToLocalFile(configPo);
@@ -90,17 +83,26 @@ public class ExtApiServiceImpl implements ExtApiService {
             String[] types = {"TABLE"};
             ResultSet rs = dbMetData.getTables(null, null, "%", types);
             while (rs.next()) {
-                LocalTable localTable = new LocalTable();
-                String tableName = rs.getString("TABLE_NAME");
-                LOG.info(tableName);
-                localTable.setTableName(tableName);
-                getColumns(dbMetData,tableName);
+                LocalTable localTable = initLocalTable(connection, rs);
                 localTables.add(localTable);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return localTables;
+    }
+
+    private LocalTable initLocalTable(Connection connection, ResultSet rs) throws SQLException {
+        LocalTable localTable = new LocalTable();
+        String tableName = rs.getString("TABLE_NAME");
+        LOG.info(tableName);
+        String tableType = rs.getString("TABLE_TYPE");
+        String remarks = rs.getString("REMARKS");
+        localTable.setComment(remarks);
+        localTable.setTableType(tableType);
+        localTable.setTableName(tableName);
+        getColumns(connection.getMetaData(),tableName,localTable);
+        return localTable;
     }
 
     /**
@@ -122,25 +124,24 @@ public class ExtApiServiceImpl implements ExtApiService {
 
     @Override
     public byte[] generateCode(String tableNames, String address) {
+        String[] split = tableNames.trim().split(",");
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         try {
             try (ZipOutputStream zip = new ZipOutputStream(outputStream)) {
-            }
-        } catch (IOException e) {
-            LOG.error("generateCode IO Exception, {}",e);
-        }
+                Connection connection = ConnectionHolder.getConnection(address);
+                for (String s : split) {
+                    LOG.info("需要生成代码的表{}",s);
+                    LocalTable table = new LocalTable();
 
-        String[] split = tableNames.trim().split(",");
-        try {
-            Connection connection = ConnectionHolder.getConnection(address);
-            for (String s : split) {
-                LOG.info("需要生成代码的表{}",s);
-                LocalTable columns = getColumns(connection.getMetaData(), s);
-                //生成代码啦，替换模板
-                generateCodeUseTemplate(columns);
+                    String[] types = {"TABLE"};
+                    ResultSet rs = connection.getMetaData().getTables(null, null, "%", types);
+                    table= initLocalTable(connection, rs);
+                    //生成代码啦，替换模板
+                    generateCodeUseTemplate(table,zip);
+                }
             }
-        } catch (SQLException e) {
-            LOG.error("生成表发生异常{}",e);
+        } catch (Exception e) {
+            LOG.error("生成表发生异常, {}",e);
         }
         return outputStream.toByteArray();
     }
@@ -148,14 +149,20 @@ public class ExtApiServiceImpl implements ExtApiService {
     /**
      * 用模板生成代码
      * @param columns
+     * @param zip
      */
-    private void generateCodeUseTemplate(LocalTable columns) {
-
+    private void generateCodeUseTemplate(LocalTable columns, ZipOutputStream zip) {
+        GenerateCodeService.generatorCode(columns,columns.getColumnList(),zip);
     }
 
-    private LocalTable getColumns(DatabaseMetaData meta, String tableName) throws SQLException {
-        LocalTable localTable = new LocalTable();
+    private LocalTable getColumns(DatabaseMetaData meta, String tableName,LocalTable localTable) throws SQLException {
         List<LocalColumn> localColumns = new ArrayList<>();
+        ResultSet primaryKeys = meta.getPrimaryKeys(null, null, tableName);
+        String pkColumnName = null;
+        while (primaryKeys.next()) {
+            pkColumnName = primaryKeys.getString("COLUMN_NAME");
+        }
+        LocalColumn pkColumn = new LocalColumn();
         ResultSet survey = meta.getColumns(null, null, tableName, null);
         while (survey.next()) {
             LocalColumn localColumn = new LocalColumn();
@@ -173,10 +180,18 @@ public class ExtApiServiceImpl implements ExtApiService {
             }
             int position = survey.getInt("ORDINAL_POSITION");
             localColumn.setPosition(position);
+            //localColumn.setAttrName(survey.getString("ATTR_NAME"));
+            localColumn.setColumnComment(survey.getString("REMARKS"));
+            if (columnName.equalsIgnoreCase(pkColumnName)){
+                pkColumn=localColumn;
+            }
             localColumns.add(localColumn);
         }
+        localTable.setPk(pkColumn);
         localTable.setTableName(tableName);
         localTable.setColumnList(localColumns);
         return localTable;
     }
+
+
 }

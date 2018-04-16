@@ -14,7 +14,6 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,23 +29,21 @@ import java.util.zip.ZipOutputStream;
  * @since 1.0
  */
 
-@Service
 public class GenerateCodeService {
 
     private static final Logger LOG = LoggerFactory.getLogger(GenerateCodeService.class);
 
     public static List<String> getTemplates(){
         List<String> templates = new ArrayList<>();
-        templates.add("templates/code/Entity.java.vm");
-        templates.add("templates/code/Dao.java.vm");
-//        templates.add("templates/Repository.java.vm");
-        templates.add("templates/code/Dao.xml.vm");
-        templates.add("templates/code/Service.java.vm");
-        templates.add("templates/code/ServiceImpl.java.vm");
-        templates.add("templates/code/Controller.java.vm");
-        templates.add("templates/code/list.html.vm");
-        templates.add("templates/code/list.js.vm");
-        templates.add("templates/code/menu.sql.vm");
+        templates.add("temp/Entity.java.vm");
+        templates.add("temp/Dao.java.vm");
+        templates.add("temp/Dao.xml.vm");
+        templates.add("temp/Service.java.vm");
+        templates.add("temp/ServiceImpl.java.vm");
+        templates.add("temp/Controller.java.vm");
+        templates.add("temp/list.html.vm");
+        templates.add("temp/list.js.vm");
+        templates.add("temp/menu.sql.vm");
         return templates;
     }
 
@@ -58,12 +55,10 @@ public class GenerateCodeService {
         //配置信息
         Configuration config = getConfig();
         boolean hasBigDecimal = false;
-        //表信息
-        LocalTable tableEntity = new LocalTable();
         //表名转换成Java类名
-        String className = tableToJava(tableEntity.getTableName(), config.getString("tablePrefix" ));
-        tableEntity.setClassName(className);
-        tableEntity.setClassLittleName(StringUtils.uncapitalize(className));
+        String className = tableToJava(table.getTableName(), config.getString("tablePrefix"));
+        table.setClassName(className);
+        table.setClassLittleName(StringUtils.uncapitalize(className));
 
         //列信息
         List<LocalColumn> columnsList = new ArrayList<>();
@@ -80,16 +75,13 @@ public class GenerateCodeService {
             if (!hasBigDecimal && attrType.equals("BigDecimal" )) {
                 hasBigDecimal = true;
             }
-            //是否主键
-            if ("PRI".equalsIgnoreCase(column.getColumnKey()) && column.getPk() == null) {
-                tableEntity.setPk(column);
-            }
+            columnsList.add(column);
         }
-        tableEntity.setColumnList(columnsList);
+        table.setColumnList(columnsList);
 
         //没主键，则第一个字段为主键
-        if (tableEntity.getPk() == null) {
-            tableEntity.setPk(tableEntity.getColumnList().get(0));
+        if (table.getPk() == null) {
+            table.setPk(table.getColumnList().get(0));
         }
 
         //设置velocity资源加载器
@@ -100,13 +92,13 @@ public class GenerateCodeService {
         mainPath = StringUtils.isBlank(mainPath) ? "com.generator" : mainPath;
         //封装模板数据
         Map<String, Object> map = new HashMap<>();
-        map.put("tableName", tableEntity.getTableName());
-        map.put("comments", tableEntity.getComment());
-        map.put("pk", tableEntity.getPk());
-        map.put("className", tableEntity.getClassName());
-        map.put("classname", tableEntity.getClassLittleName());
-        map.put("pathName", tableEntity.getClassLittleName().toLowerCase());
-        map.put("columns", tableEntity.getColumnList());
+        map.put("tableName", table.getTableName());
+        map.put("comments", table.getComment());
+        map.put("pk", table.getPk());
+        map.put("className", table.getClassName());
+        map.put("classname", table.getClassLittleName());
+        map.put("pathName", table.getClassLittleName().toLowerCase());
+        map.put("columns", table.getColumnList());
         map.put("hasBigDecimal", hasBigDecimal);
         map.put("mainPath", mainPath);
         map.put("package", config.getString("package" ));
@@ -126,13 +118,13 @@ public class GenerateCodeService {
 
 
                     //添加到zip
-                    zip.putNextEntry(new ZipEntry(getFileName(template, tableEntity.getClassName(), config.getString("package"), config.getString("moduleName"))));
+                    zip.putNextEntry(new ZipEntry(getFileName(template, table.getClassName(), config.getString("package"), config.getString("moduleName"))));
                     IOUtils.write(sw.toString(), zip, "UTF-8");
                     zip.closeEntry();
 
             } catch (IOException e) {
                 LOG.error("渲染模板发生异常{}",e);
-                throw new RuntimeException("渲染模板失败，表名：" + tableEntity.getTableName(), e);
+                throw new RuntimeException("渲染模板失败，表名：" + table.getTableName(), e);
             }
         }
     }
@@ -160,7 +152,7 @@ public class GenerateCodeService {
      */
     public static Configuration getConfig() {
         try {
-            return new PropertiesConfiguration("generator.properties" );
+            return new PropertiesConfiguration("generator/generator-config.properties" );
         } catch (ConfigurationException e) {
             throw new RuntimeException("获取配置文件失败，", e);
         }
