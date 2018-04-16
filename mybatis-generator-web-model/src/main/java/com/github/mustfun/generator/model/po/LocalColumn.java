@@ -11,7 +11,10 @@ import lombok.Setter;
  */
 @Setter
 @Getter
-public class LocalColumns {
-    private Integer id;
+public class LocalColumn {
     private String name;
+    private String type;
+    private Integer size;
+    private Boolean nullable;
+    private Integer position;
 }

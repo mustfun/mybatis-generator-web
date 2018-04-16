@@ -3,6 +3,7 @@ package com.github.mustfun.generator.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.github.mustfun.generator.model.constants.FileConstants;
 import com.github.mustfun.generator.model.po.DbConfigPo;
+import com.github.mustfun.generator.model.po.LocalColumn;
 import com.github.mustfun.generator.model.po.LocalTable;
 import com.github.mustfun.generator.service.ExtApiService;
 import com.github.mustfun.generator.support.handler.ConnectionHolder;
@@ -117,32 +118,55 @@ public class ExtApiServiceImpl implements ExtApiService {
     }
 
     @Override
-    public BaseResult<Long> generateCode(String tableNames) {
+    public BaseResult<Long> generateCode(String tableNames, String address) {
         BaseResult<Long> baseResult = new BaseResult<>();
         String[] split = tableNames.trim().split(",");
-        for (String s : split) {
-            LOG.info("需要生成代码的表{}",s);
+        try {
+            Connection connection = ConnectionHolder.getConnection(address);
+            for (String s : split) {
+                LOG.info("需要生成代码的表{}",s);
+                LocalTable columns = getColumns(connection.getMetaData(), s);
+                //生成代码啦，替换模板
+                generateCodeUseTemplate(columns);
+            }
+        } catch (SQLException e) {
+            LOG.error("生成表发生异常{}",e);
         }
         return baseResult;
     }
 
-    private void getColumns(DatabaseMetaData meta, String tableName) throws SQLException {
+    /**
+     * 用模板生成代码
+     * @param columns
+     */
+    private void generateCodeUseTemplate(LocalTable columns) {
+
+    }
+
+    private LocalTable getColumns(DatabaseMetaData meta, String tableName) throws SQLException {
+        LocalTable localTable = new LocalTable();
+        List<LocalColumn> localColumns = new ArrayList<>();
         ResultSet survey = meta.getColumns(null, null, tableName, null);
         while (survey.next()) {
+            LocalColumn localColumn = new LocalColumn();
             String columnName = survey.getString("COLUMN_NAME");
-            LOG.info("column name=" + columnName);
+            localColumn.setName(columnName);
             String columnType = survey.getString("TYPE_NAME");
-            LOG.info("type:" + columnType);
+            localColumn.setType(columnType);
             int size = survey.getInt("COLUMN_SIZE");
-            LOG.info("size:" + size);
+            localColumn.setSize(size);
             int nullable = survey.getInt("NULLABLE");
             if (nullable == DatabaseMetaData.columnNullable) {
-                LOG.info("nullable true");
+                localColumn.setNullable(true);
             } else {
-                LOG.info("nullable false");
+                localColumn.setNullable(false);
             }
             int position = survey.getInt("ORDINAL_POSITION");
-            LOG.info("position:" + position);
+            localColumn.setPosition(position);
+            localColumns.add(localColumn);
         }
+        localTable.setName(tableName);
+        localTable.setColumnList(localColumns);
+        return localTable;
     }
 }

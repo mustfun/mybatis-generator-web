@@ -8,6 +8,7 @@
     <header th:include="common/header"></header>
 
 
+    <input type="hidden" th:value="${address}" id="addressId"/>
     <!-- START MAIN -->
     <div id="main">
         <!-- START WRAPPER -->
@@ -101,12 +102,12 @@
         box.each(function (i) {
             if (i==box.length-1){
                 tableName=tableName+this.value
-            } else{
+            }else{
                 tableName=tableName+this.value+",";
             }
         });
         $.ajax({
-            url:"/api/generate_code?tableName="+encodeURIComponent(tableName),
+            url:"/api/generate_code?tableName="+encodeURIComponent(tableName)+"&address="+$("#addressId").val(),
             type:'GET', //GET
             async:true,    //或false,是否异步
             contentType:"application/x-www-form-urlencoded",

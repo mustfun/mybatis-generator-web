@@ -33,8 +33,9 @@ public class ExtApiControllerImpl {
 
 
     @RequestMapping(value = "generate_code",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public BaseResult<Long> generateCode(@RequestParam("tableName") String tableNames) {
-        return extApiService.generateCode(tableNames);
+    public BaseResult<Long> generateCode(@RequestParam("tableName") String tableNames,
+    @RequestParam("address")String address) {
+        return extApiService.generateCode(tableNames,address);
     }
 
 }

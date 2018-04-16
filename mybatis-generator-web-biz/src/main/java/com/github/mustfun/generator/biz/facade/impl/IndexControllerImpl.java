@@ -68,6 +68,7 @@ public class IndexControllerImpl implements IndexController {
         DbConfigPo dbConfigPo = JSON.parseObject(key, DbConfigPo.class);
         List<LocalTable> tables = extApiService.getTables(ConnectionHolder.getConnection(dbConfigPo.getAddress()));
         model.addAttribute("tables", tables);
+        model.addAttribute("address", dbConfigPo.getAddress());
         return "core/tableList";
     }
 
