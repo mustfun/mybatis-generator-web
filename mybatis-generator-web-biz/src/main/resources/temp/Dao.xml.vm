@@ -5,9 +5,9 @@
 
 	<!-- 可根据自己的需求，是否要使用 -->
     <resultMap type="${package}.${moduleName}.entity.${className}Entity" id="${classLittleName}Map">
-#foreach($column in $columns)
-        <result property="${column.attrLittleName}" column="${column.columnName}"/>
-#end
+		#foreach($column in $columns)
+				<result property="${column.attrLittleName}" column="${column.columnName}"/>
+		#end
     </resultMap>
 
 	<select id="queryObject" resultType="${package}.${moduleName}.entity.${className}Entity">
@@ -33,7 +33,7 @@
 		select count(*) from ${tableName} 
 	</select>
 	 
-	<insert id="save" parameterType="${package}.${moduleName}.entity.${className}Entity"#if($pk.extra == 'auto_increment') useGeneratedKeys="true" keyProperty="$pk.attrname"#end>
+	<insert id="save" parameterType="${package}.${moduleName}.entity.${className}Entity"#if($pk.extra == 'auto_increment') useGeneratedKeys="true" keyProperty="$pk.attrLittleName"#end>
 		insert into ${tableName}
 		(
 #foreach($column in $columns)
@@ -47,7 +47,7 @@
 		(
 #foreach($column in $columns)
 #if($column.columnName != $pk.columnName || $pk.extra != 'auto_increment')
-			#{$column.attrname}#if($velocityCount != $columns.size()), #end
+			#{$column.attrLittleName}#if($velocityCount != $columns.size()), #end
 
 #end			
 #end
@@ -59,11 +59,11 @@
 		<set>
 #foreach($column in $columns)
 #if($column.columnName != $pk.columnName)
-			<if test="$column.attrname != null">`$column.columnName` = #{$column.attrname}#if($velocityCount != $columns.size()), #end</if>
+			<if test="$column.attrLittleName != null">`$column.columnName` = #{$column.attrLittleName}#if($velocityCount != $columns.size()), #end</if>
 #end
 #end
 		</set>
-		where ${pk.columnName} = #{${pk.attrname}}
+		where ${pk.columnName} = #{${pk.attrLittleName}}
 	</update>
 	
 	<delete id="delete">
@@ -72,8 +72,8 @@
 	
 	<delete id="deleteBatch">
 		delete from ${tableName} where ${pk.columnName} in 
-		<foreach item="${pk.attrname}" collection="array" open="(" separator="," close=")">
-			#{${pk.attrname}}
+		<foreach item="${pk.attrLittleName}" collection="array" open="(" separator="," close=")">
+			#{${pk.attrLittleName}}
 		</foreach>
 	</delete>
 

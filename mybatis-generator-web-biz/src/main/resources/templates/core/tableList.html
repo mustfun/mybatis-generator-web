@@ -26,6 +26,7 @@
                         <thead>
                         <tr>
                             <th data-field="id">名称</th>
+                            <th>备注</th>
                             <th data-field="operation">
                                 <input type="checkbox" class="filled-in" id="chooseAllCheckbox">
                                 <label for="chooseAllCheckbox"></label>
@@ -36,6 +37,7 @@
                         <!--/*@thymesVar id="config" type="com.github.mustfun.generator.model.po.DbConfigPo"*/-->
                         <tr th:each="table : ${tables}">
                             <td th:text="${table.tableName}"></td>
+                            <td th:text="${table.getComment()}"></td>
                             <td>
                                 <p>
                                     <input type="checkbox" class="filled-in" th:value="${table.tableName}" th:name="checked-table-name" th:id="${table.tableName}+id">

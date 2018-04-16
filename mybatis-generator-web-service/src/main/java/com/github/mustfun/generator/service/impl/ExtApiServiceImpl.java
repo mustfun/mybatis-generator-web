@@ -87,7 +87,7 @@ public class ExtApiServiceImpl implements ExtApiService {
                 localTables.add(localTable);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.info("table出错");
         }
         return localTables;
     }
@@ -132,10 +132,10 @@ public class ExtApiServiceImpl implements ExtApiService {
                 for (String s : split) {
                     LOG.info("需要生成代码的表{}",s);
                     LocalTable table = new LocalTable();
-
-                    String[] types = {"TABLE"};
-                    ResultSet rs = connection.getMetaData().getTables(null, null, "%", types);
-                    table= initLocalTable(connection, rs);
+                    ResultSet rs = connection.getMetaData().getTables(null,null,s, new String[]{"TABLE","VIEW"});
+                    while (rs.next()) {
+                        table = initLocalTable(connection, rs);
+                    }
                     //生成代码啦，替换模板
                     generateCodeUseTemplate(table,zip);
                 }

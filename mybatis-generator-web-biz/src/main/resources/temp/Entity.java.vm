@@ -18,21 +18,21 @@ public class ${className}Entity implements Serializable {
 	
 #foreach ($column in $columns)
 	//$column.comments
-	private $column.attrType $column.attrname;
+	private $column.attrType $column.attrLittleName;
 #end
 
 #foreach ($column in $columns)
 	/**
 	 * 设置：${column.comments}
 	 */
-	public void set${column.attrName}($column.attrType $column.attrname) {
-		this.$column.attrname = $column.attrname;
+	public void set${column.attrName}($column.attrType $column.attrLittleName) {
+		this.$column.attrLittleName = $column.attrLittleName;
 	}
 	/**
 	 * 获取：${column.comments}
 	 */
 	public $column.attrType get${column.attrName}() {
-		return $column.attrname;
+		return $column.attrLittleName;
 	}
 #end
 }

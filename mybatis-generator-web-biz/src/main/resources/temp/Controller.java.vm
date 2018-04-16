@@ -54,10 +54,10 @@ public class ${className}Controller {
 	/**
 	 * 信息
 	 */
-	@RequestMapping("/info/{${pk.attrname}}")
+	@RequestMapping("/info/{${pk.attrLittleName}}")
 	@RequiresPermissions("${moduleName}:${pathName}:info")
-	public R info(@PathVariable("${pk.attrname}") ${pk.attrType} ${pk.attrname}){
-		${className}Entity ${classLittleName} = ${classLittleName}Service.queryObject(${pk.attrname});
+	public R info(@PathVariable("${pk.attrLittleName}") ${pk.attrType} ${pk.attrLittleName}){
+		${className}Entity ${classLittleName} = ${classLittleName}Service.queryObject(${pk.attrLittleName});
 		
 		return R.ok().put("${classLittleName}", ${classLittleName});
 	}
@@ -89,8 +89,8 @@ public class ${className}Controller {
 	 */
 	@RequestMapping("/delete")
 	@RequiresPermissions("${moduleName}:${pathName}:delete")
-	public R delete(@RequestBody ${pk.attrType}[] ${pk.attrname}s){
-		${classLittleName}Service.deleteBatch(${pk.attrname}s);
+	public R delete(@RequestBody ${pk.attrType}[] ${pk.attrLittleName}s){
+		${classLittleName}Service.deleteBatch(${pk.attrLittleName}s);
 		
 		return R.ok();
 	}

@@ -41,9 +41,6 @@ public class GenerateCodeService {
         templates.add("temp/Service.java.vm");
         templates.add("temp/ServiceImpl.java.vm");
         templates.add("temp/Controller.java.vm");
-        templates.add("temp/list.html.vm");
-        templates.add("temp/list.js.vm");
-        templates.add("temp/menu.sql.vm");
         return templates;
     }
 
@@ -96,7 +93,7 @@ public class GenerateCodeService {
         map.put("comments", table.getComment());
         map.put("pk", table.getPk());
         map.put("className", table.getClassName());
-        map.put("classname", table.getClassLittleName());
+        map.put("classLittleName", table.getClassLittleName());
         map.put("pathName", table.getClassLittleName().toLowerCase());
         map.put("columns", table.getColumnList());
         map.put("hasBigDecimal", hasBigDecimal);
@@ -193,20 +190,6 @@ public class GenerateCodeService {
 
         if (template.contains("Dao.xml.vm" )) {
             return "main" + File.separator + "resources" + File.separator + "mapper" + File.separator + moduleName + File.separator + className + "Dao.xml";
-        }
-
-        if (template.contains("list.html.vm" )) {
-            return "main" + File.separator + "resources" + File.separator + "views" + File.separator
-                    + "modules" + File.separator + moduleName + File.separator + className.toLowerCase() + ".html";
-        }
-
-        if (template.contains("list.js.vm" )) {
-            return "main" + File.separator + "resources" + File.separator + "static" + File.separator + "js" + File.separator
-                    + "modules" + File.separator + moduleName + File.separator + className.toLowerCase() + ".js";
-        }
-
-        if (template.contains("menu.sql.vm" )) {
-            return className.toLowerCase() + "_menu.sql";
         }
 
         return null;
