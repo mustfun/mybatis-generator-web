@@ -1,5 +1,6 @@
 package com.github.mustfun.generator.model.po;
 
+import com.alibaba.druid.support.json.JSONUtils;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,9 +13,18 @@ import lombok.Setter;
 @Setter
 @Getter
 public class DbConfigPo {
-    private Long id;
     private String address;
     private String dbName;
     private String userName;
     private String password;
+
+    @Override
+    public String toString() {
+        return "{" +
+                "address='" + address + '\'' +
+                ", dbName='" + dbName + '\'' +
+                ", userName='" + userName + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
 }

@@ -137,7 +137,7 @@
             success:function(data,textStatus,jqXHR){
                 if(data['status']=="0"){
                     alert("成功录入");
-                    window.location.href="/dbList";
+                    window.location="/dbList";
                 }else{
                     alert(data['message']);
                 }
@@ -150,7 +150,7 @@
 
     function chooseThis(data) {
         var value = $(data).closest("tr").find("input").val();
-        return window.location.href="/tableList?key="+encodeURIComponent(value);
+        
     }
     
 </script>

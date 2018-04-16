@@ -12,9 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.xnio.IoUtils;
 
 import java.io.FileInputStream;
@@ -55,6 +53,13 @@ public class IndexControllerImpl implements IndexController {
             LOG.error("{}",e);
         }
         return "core/dbList";
+    }
+
+    @RequestMapping(value = "/tableList",method = RequestMethod.GET)
+    public String tableList(Model model,@RequestParam("key") String key) {
+        LOG.info(key);
+        DbConfigPo dbConfigPo = JSON.parseObject(key, DbConfigPo.class);
+        return "core/tableList";
     }
 
     @RequestMapping(value = "/modal",method = RequestMethod.GET)
