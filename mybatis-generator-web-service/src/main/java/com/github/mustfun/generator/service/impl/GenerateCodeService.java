@@ -67,7 +67,7 @@ public class GenerateCodeService {
             column.setAttrLittleName(StringUtils.uncapitalize(attrName));
 
             //列的数据类型，转换成Java类型
-            String attrType = config.getString(column.getDataType(), "unknowType" );
+            String attrType = config.getString(column.getDataType().toUpperCase(), "String" );
             column.setAttrType(attrType);
             if (!hasBigDecimal && attrType.equals("BigDecimal" )) {
                 hasBigDecimal = true;
@@ -90,7 +90,7 @@ public class GenerateCodeService {
         //封装模板数据
         Map<String, Object> map = new HashMap<>();
         map.put("tableName", table.getTableName());
-        map.put("comments", table.getComment());
+        map.put("comment", table.getComment());
         map.put("pk", table.getPk());
         map.put("className", table.getClassName());
         map.put("classLittleName", table.getClassLittleName());

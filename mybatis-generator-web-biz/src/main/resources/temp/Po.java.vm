@@ -10,7 +10,8 @@ import java.math.BigDecimal;
  * ${comment}
  * 
  * @author ${author}
- * @email ${email}
+ * @mail ${email}
+ * @since jdk1.8
  * @date ${datetime}
  */
 public class ${className}Po implements Serializable {
@@ -23,13 +24,13 @@ public class ${className}Po implements Serializable {
 
 #foreach ($column in $columns)
 	/**
-	 * 设置：${column.columnComment}
+	 * ${column.columnComment}
 	 */
 	public void set${column.attrName}($column.attrType $column.attrLittleName) {
 		this.$column.attrLittleName = $column.attrLittleName;
 	}
 	/**
-	 * 获取：${column.columnComment}
+	 * ${column.columnComment}
 	 */
 	public $column.attrType get${column.attrName}() {
 		return $column.attrLittleName;

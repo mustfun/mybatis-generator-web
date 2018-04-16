@@ -4,11 +4,22 @@
 <mapper namespace="${package}.${moduleName}.dao.${className}Dao">
 
 	<!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="${package}.${moduleName}.po.${className}Po" id="${classLittleName}Map">
+    <resultMap type="${package}.${moduleName}.po.${className}Po" id="BaseResultMap">
 		#foreach($column in $columns)
 				<result property="${column.attrLittleName}" column="${column.columnName}"/>
 		#end
     </resultMap>
+
+
+    <!--
+        Where条件前缀子句
+    -->
+    <sql id="Base_Query_WhereCondition">
+		#foreach($column in $columns)
+			<result property="${column.attrLittleName}" column="${column.columnName}"/>
+		#end
+	</sql>
+
 
 	<select id="queryObject" resultType="${package}.${moduleName}.po.${className}Po">
 		select * from ${tableName} where ${pk.columnName} = #{value}
