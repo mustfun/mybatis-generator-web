@@ -1,6 +1,5 @@
 package com.github.mustfun.generator.model.po;
 
-import com.alibaba.druid.support.json.JSONUtils;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,11 +19,16 @@ public class DbConfigPo {
 
     @Override
     public String toString() {
-        return "{" +
-                "address='" + address + '\'' +
-                ", dbName='" + dbName + '\'' +
-                ", userName='" + userName + '\'' +
-                ", password='" + password + '\'' +
-                '}';
+        final StringBuilder sb = new StringBuilder("{");
+        sb.append("\"address\":\"")
+                .append(address).append('\"');
+        sb.append(",\"dbName\":\"")
+                .append(dbName).append('\"');
+        sb.append(",\"userName\":\"")
+                .append(userName).append('\"');
+        sb.append(",\"password\":\"")
+                .append(password).append('\"');
+        sb.append('}');
+        return sb.toString();
     }
 }
