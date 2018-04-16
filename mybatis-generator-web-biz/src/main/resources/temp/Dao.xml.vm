@@ -3,11 +3,11 @@
 
 <mapper namespace="${package}.${moduleName}.dao.${className}Dao">
 
-	<!-- 可根据自己的需求，是否要使用 -->
+    <!-- 可根据自己的需求，是否要使用 -->
     <resultMap type="${package}.${moduleName}.po.${className}Po" id="BaseResultMap">
-		#foreach($column in $columns)
-				<result property="${column.attrLittleName}" column="${column.columnName}"/>
-		#end
+        #foreach($column in $columns)
+            <result property="${column.attrLittleName}" column="${column.columnName}"/>
+        #end
     </resultMap>
 
     <!--
@@ -35,7 +35,7 @@
     -->
     <sql id="Base_Column_List">
         #foreach($column in $columns)
-                ${column.columnName},
+        ${column.columnName},
         #end
     </sql>
 
@@ -68,7 +68,7 @@
       -->
     <select id="selectPaged" resultMap="BaseResultMap">
         select
-        <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         from ${tableName}
     </select>
 
@@ -84,38 +84,41 @@
     <!--
       添加一条记录到数据库表中
     -->
-    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="${package}.${moduleName}.po.${className}Po">
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id"
+            parameterType="${package}.${moduleName}.po.${className}Po">
         insert into cps_lock
         (<include refid="Base_Column_List"/>)
         values (
-            #foreach($column in $columns)
-                <if test="${column.attrLittleName}!=null">
-                    #{${column.attrLittleName},jdbcType=${column.dataType},
-                </if>
-            #end
+        #foreach($column in $columns)
+            <if test="${column.attrLittleName}!=null">
+                #{${column.attrLittleName},jdbcType=${column.dataType},
+            </if>
+        #end
         )
     </insert>
 
     <!--
      有选择的添加一条记录到数据库表中
    -->
-    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id" parameterType="com.hujiang.cbz.costpersales.model.po.CpsLockPo">
+    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id"
+            parameterType="${package}.${moduleName}.po.${className}Po">
         insert into ${tableName}
-        <include refid="Base_Insert_Selective" />
+        <include refid="Base_Insert_Selective"/>
     </insert>
 
     <!--
       有选择的可忽略添加一条记录到数据库表中
     -->
-    <insert id="insertSelectiveIgnore" useGeneratedKeys="true" keyProperty="id" parameterType="com.hujiang.cbz.costpersales.model.po.CpsLockPo">
+    <insert id="insertSelectiveIgnore" useGeneratedKeys="true" keyProperty="id"
+            parameterType="${package}.${moduleName}.po.${className}Po">
         insert ignore into ${tableName}
-        <include refid="Base_Insert_Selective" />
+        <include refid="Base_Insert_Selective"/>
     </insert>
 
     <!--
       根据主键有选择的更新数据库表
     -->
-    <update id="updateByPrimaryKeySelective"  parameterType="com.hujiang.cbz.costpersales.model.po.CpsLockPo">
+    <update id="updateByPrimaryKeySelective" parameterType="${package}.${moduleName}.po.${className}Po">
         update ${tableName}
         <include refid="Base_Update_Column"></include>
         where ${pk.columnName} = #{${pk.attrLittleName},${pk.dataType}}
@@ -125,12 +128,12 @@
     <!--
       根据主键更新数据库表
     -->
-    <update id="updateByPrimaryKey"  parameterType="com.hujiang.cbz.costpersales.model.po.CpsLockPo">
+    <update id="updateByPrimaryKey" parameterType="${package}.${moduleName}.po.${className}Po">
         update ${tableName}
         <set>
             #foreach($column in $columns)
                 <if test="${column.attrLittleName}!=null">
-                    ${column.columnName} = #{${column.attrLittleName},jdbcType=${column.dataType},
+                    ${column.columnName} = #{${column.attrLittleName},jdbcType=${column.dataType}},
                 </if>
             #end
         </set>
@@ -144,14 +147,14 @@
         insert into ${tableName}
         <trim prefix="(" suffix=")" suffixOverrides=",">
             #foreach($column in $columns)
-                    ${column.columnName},
+                ${column.columnName},
             #end
         </trim>
         values
         <foreach collection="list" index="index" item="item" separator=",">
             <trim prefix="(" suffix=")" suffixOverrides=",">
                 #foreach($column in $columns)
-                        #{${column.attrLittleName},jdbcType=${column.dataType},
+                    #{${column.attrLittleName},jdbcType=${column.dataType}},
                 #end
             </trim>
         </foreach>
@@ -167,7 +170,7 @@
                 <trim suffixOverrides=",">
                     #foreach($column in $columns)
                         <if test="item.${column.attrLittleName}!=null">
-                            ${column.columnName} = #{${column.attrLittleName},jdbcType=${column.dataType},
+                            ${column.columnName} = #{${column.attrLittleName},jdbcType=${column.dataType}},
                         </if>
                     #end
                 </trim>
@@ -187,7 +190,7 @@
         <foreach collection="array" index="index" item="item" separator=" and ">
             #foreach($column in $columns)
                 <if test="item == ${column.attrLittleName}">
-                    ${column.columnName} = #{${column.attrLittleName},jdbcType=${column.dataType}
+                    ${column.columnName} = #{${column.attrLittleName},jdbcType=${column.dataType}}
                 </if>
             #end
         </foreach>
@@ -234,7 +237,7 @@
         <trim prefix="(" suffix=")" suffixOverrides=",">
             #foreach($column in $columns)
                 <if test="${column.attrLittleName}!=null">
-                    ${column.columnName} = #{${column.attrLittleName},jdbcType=${column.dataType},
+                    ${column.columnName} = #{${column.attrLittleName},jdbcType=${column.dataType}},
                 </if>
             #end
         </trim>
@@ -242,13 +245,13 @@
         <trim suffixOverrides=",">
             #foreach($column in $columns)
                 <if test="${column.attrLittleName}!=null">
-                    ${column.columnName} = #{${column.attrLittleName},jdbcType=${column.dataType},
+                    ${column.columnName} = #{${column.attrLittleName},jdbcType=${column.dataType}},
                 </if>
             #end
         </trim>
     </update>
 
-    <select id="query" resultMap="BaseResultMap" parameterType="com.hujiang.cbz.costpersales.model.po.CpsLockPo">
+    <select id="query" resultMap="BaseResultMap" parameterType="${package}.${moduleName}.po.${className}Po">
         select
         <include refid="Base_Column_List"/>
         from ${tableName}
@@ -256,17 +259,17 @@
             <include refid="Base_Query_Where"></include>
         </where>
     </select>
-	
- 	<select id="queryTotal" resultType="int">
+
+    <select id="queryTotal" resultType="int">
 		select count(*) from ${tableName} 
 	</select>
 
-	
-	<delete id="deleteBatch">
-		delete from ${tableName} where ${pk.columnName} in 
-		<foreach item="${pk.attrLittleName}" collection="array" open="(" separator="," close=")">
-			#{${pk.attrLittleName}}
-		</foreach>
-	</delete>
+
+    <delete id="deleteBatch">
+        delete from ${tableName} where ${pk.columnName} in
+        <foreach item="${pk.attrLittleName}" collection="array" open="(" separator="," close=")">
+            #{${pk.attrLittleName}}
+        </foreach>
+    </delete>
 
 </mapper>
