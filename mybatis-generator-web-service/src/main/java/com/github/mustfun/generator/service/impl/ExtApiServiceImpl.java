@@ -1,21 +1,18 @@
 package com.github.mustfun.generator.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.github.mustfun.generator.model.constants.FileConstants;
 import com.github.mustfun.generator.model.po.DbConfigPo;
+import com.github.mustfun.generator.model.po.LocalTable;
 import com.github.mustfun.generator.service.ExtApiService;
+import com.github.mustfun.generator.support.handler.ConnectionHolder;
 import com.github.mustfun.generator.support.result.BaseResult;
 import com.github.mustfun.generator.support.util.DbUtil;
-import org.apache.commons.dbutils.DbUtils;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.sql.Connection;
@@ -55,6 +52,7 @@ public class ExtApiServiceImpl implements ExtApiService {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        ConnectionHolder.addConnection(configPo.getAddress(),connection);
         //保存到文件中
         saveToLocalFile(configPo);
         baseResult.setStatus(1);
@@ -79,21 +77,43 @@ public class ExtApiServiceImpl implements ExtApiService {
         }
     }
 
-    private void getTables(Connection connection) {
+    @Override
+    public List<LocalTable> getTables(Connection connection) {
         DatabaseMetaData dbMetData;
+        List<LocalTable> localTables = new ArrayList<>();
         try {
             dbMetData = connection.getMetaData();
             String[] types = {"TABLE"};
             ResultSet rs = dbMetData.getTables(null, null, "%", types);
             while (rs.next()) {
+                LocalTable localTable = new LocalTable();
                 String tableName = rs.getString("TABLE_NAME");
                 LOG.info(tableName);
+                localTable.setName(tableName);
                 getColumns(dbMetData,tableName);
+                localTables.add(localTable);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return localTables;
+    }
 
+    /**
+     * 创建连接
+     * @param configPo
+     */
+    @Override
+    public void initDb(DbConfigPo configPo) {
+        if (ConnectionHolder.getConnection(configPo.getAddress())!=null){
+            return ;
+        }
+        DbUtil dbUtil = new DbUtil(configPo.getAddress(), configPo.getDbName(), configPo.getUserName(), configPo.getPassword());
+        Connection connection = dbUtil.getConnection();
+        if (connection==null){
+            return ;
+        }
+        ConnectionHolder.addConnection(configPo.getAddress(),connection);
     }
 
     private void getColumns(DatabaseMetaData meta, String tableName) throws SQLException {

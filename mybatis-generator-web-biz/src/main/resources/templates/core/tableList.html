@@ -20,24 +20,25 @@
 
                 <!--start container-->
                 <div class="container">
-                    <h4>数据库列表</h4>
+                    <h4>表一览</h4>
                     <table class="striped bordered">
                         <thead>
                         <tr>
                             <th data-field="id">名称</th>
-                            <th data-field="name">地址</th>
-                            <th data-field="price">账号</th>
                             <th data-field="operation">操作</th>
                         </tr>
                         </thead>
                         <tbody id="dbListId">
                         <!--/*@thymesVar id="config" type="com.github.mustfun.generator.model.po.DbConfigPo"*/-->
-                        <tr th:each="config : ${dbConfigList}">
-                            <td th:text="${config.dbName}"></td>
-                            <td th:text="${config.address}">Eclair</td>
-                            <td th:text="${config.userName}">$0.87</td>
-                            <td><a class="btn-floating waves-effect waves-light orange" onclick="chooseThis(this)"><i class="mdi-action-done"></i>选择这个</a></td>
-                            <input type="hidden" th:value="${config.toString()}">
+                        <tr th:each="table : ${tables}">
+                            <td th:text="${table.name}"></td>
+                            <td>
+                                <p>
+                                    <input type="checkbox" class="filled-in" th:id="${table.name}+id">
+                                    <label  th:for="${table.name}+id">选择这个</label>
+                                </p>
+                            </td>
+                            <input type="hidden" th:value="${table.toString()}">
                         </tr>
                         </tbody>
                     </table>

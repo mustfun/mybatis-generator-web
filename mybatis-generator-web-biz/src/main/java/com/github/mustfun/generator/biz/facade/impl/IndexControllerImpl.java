@@ -4,7 +4,10 @@ import com.alibaba.fastjson.JSON;
 import com.github.mustfun.generator.biz.facade.IndexController;
 import com.github.mustfun.generator.model.constants.FileConstants;
 import com.github.mustfun.generator.model.po.DbConfigPo;
+import com.github.mustfun.generator.model.po.LocalTable;
 import com.github.mustfun.generator.service.CityService;
+import com.github.mustfun.generator.service.ExtApiService;
+import com.github.mustfun.generator.support.handler.ConnectionHolder;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +35,9 @@ public class IndexControllerImpl implements IndexController {
 
     private static final Logger LOG = LoggerFactory.getLogger(IndexControllerImpl.class);
 
+    @Autowired
+    private ExtApiService extApiService;
+
     @Override
     @RequestMapping(value = "/index",method = RequestMethod.GET)
     public String index() {
@@ -47,6 +53,7 @@ public class IndexControllerImpl implements IndexController {
             for (String string : strings) {
                 DbConfigPo dbConfigPos = JSON.parseObject(string, DbConfigPo.class);
                 list.add(dbConfigPos);
+                extApiService.initDb(dbConfigPos);
             }
             model.addAttribute("dbConfigList", list);
         } catch (IOException e) {
@@ -59,6 +66,8 @@ public class IndexControllerImpl implements IndexController {
     public String tableList(Model model,@RequestParam("key") String key) {
         LOG.info(key);
         DbConfigPo dbConfigPo = JSON.parseObject(key, DbConfigPo.class);
+        List<LocalTable> tables = extApiService.getTables(ConnectionHolder.getConnection(dbConfigPo.getAddress()));
+        model.addAttribute("tables", tables);
         return "core/tableList";
     }
 
