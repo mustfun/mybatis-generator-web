@@ -15,90 +15,252 @@
         -->
     <sql id="Base_Insert_Selective">
         <trim prefix="(" suffix=")" suffixOverrides=",">
-			#foreach($column in $columns)
-				<if test="${column.attrLittleName}!=null">
-					${column.columnName},
-				</if>
-			#end
+            #foreach($column in $columns)
+                <if test="${column.attrLittleName}!=null">
+                    ${column.columnName},
+                </if>
+            #end
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-			#foreach($column in $columns)
+            #foreach($column in $columns)
                 <if test="${column.attrLittleName}!=null">
-					#{${column.attrLittleName},jdbcType=${column.dataType},
+                    #{${column.attrLittleName},jdbcType=${column.dataType},
                 </if>
-			#end
+            #end
         </trim>
     </sql>
 
     <!--
-        Where条件前缀子句
+      数据库表的基本查询列名集合
     -->
-    <sql id="Base_Query_WhereCondition">
-		#foreach($column in $columns)
-			<result property="${column.attrLittleName}" column="${column.columnName}"/>
-		#end
-	</sql>
+    <sql id="Base_Column_List">
+        #foreach($column in $columns)
+                ${column.columnName},
+        #end
+    </sql>
+
+    <!--
+        Where子句
+      -->
+    <sql id="Base_Query_Where">
+        #foreach($column in $columns)
+            <if test="${column.attrLittleName}!=null">
+                #{${column.attrLittleName},jdbcType=${column.dataType},
+            </if>
+        #end
+    </sql>
+
+    <!--
+        基本更新字段
+    -->
+    <sql id="Base_Update_Column">
+        <set>
+            #foreach($column in $columns)
+                <if test="${column.attrLittleName}!=null">
+                    #{${column.attrLittleName},jdbcType=${column.dataType},
+                </if>
+            #end
+        </set>
+    </sql>
+
+    <!--
+        分页查询数据库表
+      -->
+    <select id="selectPaged" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from ${tableName}
+    </select>
 
 
-	<select id="queryObject" resultType="${package}.${moduleName}.po.${className}Po">
-		select * from ${tableName} where ${pk.columnName} = #{value}
-	</select>
+    <!--
+      根据主键删除数据库表中的记录
+    -->
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete FROM ${tableName}
+        where  ${pk.columnName} = #{${pk.attrLittleName},${pk.dataType}}
+    </delete>
 
-	<select id="queryList" resultType="${package}.${moduleName}.po.${className}Po">
-		select * from ${tableName}
-        <choose>
-            <when test="sidx != null and sidx.trim() != ''">
-                order by ${sidx} ${order}
-            </when>
-			<otherwise>
-                order by ${pk.columnName} desc
-			</otherwise>
-        </choose>
-		<if test="offset != null and limit != null">
-			limit #{offset}, #{limit}
-		</if>
-	</select>
+    <!--
+      添加一条记录到数据库表中
+    -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="${package}.${moduleName}.po.${className}Po">
+        insert into cps_lock
+        (<include refid="Base_Column_List"/>)
+        values (
+            #foreach($column in $columns)
+                <if test="${column.attrLittleName}!=null">
+                    #{${column.attrLittleName},jdbcType=${column.dataType},
+                </if>
+            #end
+        )
+    </insert>
+
+    <!--
+     有选择的添加一条记录到数据库表中
+   -->
+    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id" parameterType="com.hujiang.cbz.costpersales.model.po.CpsLockPo">
+        insert into ${tableName}
+        <include refid="Base_Insert_Selective" />
+    </insert>
+
+    <!--
+      有选择的可忽略添加一条记录到数据库表中
+    -->
+    <insert id="insertSelectiveIgnore" useGeneratedKeys="true" keyProperty="id" parameterType="com.hujiang.cbz.costpersales.model.po.CpsLockPo">
+        insert ignore into ${tableName}
+        <include refid="Base_Insert_Selective" />
+    </insert>
+
+    <!--
+      根据主键有选择的更新数据库表
+    -->
+    <update id="updateByPrimaryKeySelective"  parameterType="com.hujiang.cbz.costpersales.model.po.CpsLockPo">
+        update ${tableName}
+        <include refid="Base_Update_Column"></include>
+        where ${pk.columnName} = #{${pk.attrLittleName},${pk.dataType}}
+    </update>
+
+
+    <!--
+      根据主键更新数据库表
+    -->
+    <update id="updateByPrimaryKey"  parameterType="com.hujiang.cbz.costpersales.model.po.CpsLockPo">
+        update ${tableName}
+        <set>
+            #foreach($column in $columns)
+                <if test="${column.attrLittleName}!=null">
+                    ${column.columnName} = #{${column.attrLittleName},jdbcType=${column.dataType},
+                </if>
+            #end
+        </set>
+        where ${pk.columnName} = #{${pk.attrLittleName},${pk.dataType}}
+    </update>
+
+    <!--
+      批量添加记录到数据库表中
+    -->
+    <insert id="batchInsert" parameterType="java.util.List">
+        insert into ${tableName}
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #foreach($column in $columns)
+                    ${column.columnName},
+            #end
+        </trim>
+        values
+        <foreach collection="list" index="index" item="item" separator=",">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                #foreach($column in $columns)
+                        #{${column.attrLittleName},jdbcType=${column.dataType},
+                #end
+            </trim>
+        </foreach>
+    </insert>
+
+    <!--
+      根据主键批量更新数据库表中的记录
+    -->
+    <update id="batchUpdate" parameterType="java.util.List">
+        <foreach collection="list" index="index" item="item" separator=";">
+            update ${tableName}
+            <set>
+                <trim suffixOverrides=",">
+                    #foreach($column in $columns)
+                        <if test="item.${column.attrLittleName}!=null">
+                            ${column.columnName} = #{${column.attrLittleName},jdbcType=${column.dataType},
+                        </if>
+                    #end
+                </trim>
+            </set>
+            <where>
+                <trim suffixOverrides=",">
+                    where ${pk.columnName} = #{${pk.attrLittleName},${pk.dataType}}
+                </trim>
+            </where>
+        </foreach>
+    </update>
+
+    <!--
+     使用给定的字段名定义Where子句
+   -->
+    <sql id="Identifiers_Array_Conditions">
+        <foreach collection="array" index="index" item="item" separator=" and ">
+            #foreach($column in $columns)
+                <if test="item == ${column.attrLittleName}">
+                    ${column.columnName} = #{${column.attrLittleName},jdbcType=${column.dataType}
+                </if>
+            #end
+        </foreach>
+    </sql>
+
+    <!--
+      存在即更新否则插入
+    -->
+    <update id="upsert" parameterType="map">
+        insert into ${tableName}
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #foreach($column in $columns)
+                ${column.columnName},
+            #end
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #foreach($column in $columns)
+                #{${column.attrLittleName},jdbcType=${column.dataType},
+            #end
+        </trim>
+        on duplicate key update
+        <trim suffixOverrides=",">
+            #foreach($column in $columns)
+                #{${column.attrLittleName},jdbcType=${column.dataType},
+            #end
+        </trim>
+    </update>
+
+
+    <!--
+      带有空值检查的存在即更新否则插入
+    -->
+    <update id="upsertSelective" parameterType="map">
+        insert into ${tableName}
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #foreach($column in $columns)
+                <if test="${column.attrLittleName}!=null">
+                    ${column.columnName},
+                </if>
+            #end
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #foreach($column in $columns)
+                <if test="${column.attrLittleName}!=null">
+                    ${column.columnName} = #{${column.attrLittleName},jdbcType=${column.dataType},
+                </if>
+            #end
+        </trim>
+        on duplicate key update
+        <trim suffixOverrides=",">
+            #foreach($column in $columns)
+                <if test="${column.attrLittleName}!=null">
+                    ${column.columnName} = #{${column.attrLittleName},jdbcType=${column.dataType},
+                </if>
+            #end
+        </trim>
+    </update>
+
+    <select id="query" resultMap="BaseResultMap" parameterType="com.hujiang.cbz.costpersales.model.po.CpsLockPo">
+        select
+        <include refid="Base_Column_List"/>
+        from ${tableName}
+        <where>
+            <include refid="Base_Query_Where"></include>
+        </where>
+    </select>
 	
  	<select id="queryTotal" resultType="int">
 		select count(*) from ${tableName} 
 	</select>
-	 
-	<insert id="save" parameterType="${package}.${moduleName}.po.${className}Po"#if($pk.extra == 'auto_increment') useGeneratedKeys="true" keyProperty="$pk.attrLittleName"#end>
-		insert into ${tableName}
-		(
-#foreach($column in $columns)
-#if($column.columnName != $pk.columnName || $pk.extra != 'auto_increment')
-			`$column.columnName`#if($velocityCount != $columns.size()), #end
 
-#end			
-#end
-		)
-		values
-		(
-#foreach($column in $columns)
-#if($column.columnName != $pk.columnName || $pk.extra != 'auto_increment')
-			#{$column.attrLittleName}#if($velocityCount != $columns.size()), #end
-
-#end			
-#end
-		)
-	</insert>
-	 
-	<update id="update" parameterType="${package}.${moduleName}.po.${className}Po">
-		update ${tableName} 
-		<set>
-#foreach($column in $columns)
-#if($column.columnName != $pk.columnName)
-			<if test="$column.attrLittleName != null">`$column.columnName` = #{$column.attrLittleName}#if($velocityCount != $columns.size()), #end</if>
-#end
-#end
-		</set>
-		where ${pk.columnName} = #{${pk.attrLittleName}}
-	</update>
-	
-	<delete id="delete">
-		delete from ${tableName} where ${pk.columnName} = #{value}
-	</delete>
 	
 	<delete id="deleteBatch">
 		delete from ${tableName} where ${pk.columnName} in 
