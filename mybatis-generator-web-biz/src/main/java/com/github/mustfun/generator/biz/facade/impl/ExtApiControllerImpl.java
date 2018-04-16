@@ -7,7 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.websocket.server.PathParam;
 
 /**
  * @author dengzhiyuan
@@ -26,6 +29,12 @@ public class ExtApiControllerImpl {
     @RequestMapping(value = "save_db_config",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public BaseResult<Long> saveDbConfig(DbConfigPo configPo) {
         return extApiService.saveDbConfig(configPo);
+    }
+
+
+    @RequestMapping(value = "generate_code",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public BaseResult<Long> generateCode(@RequestParam("tableName") String tableNames) {
+        return extApiService.generateCode(tableNames);
     }
 
 }

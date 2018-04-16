@@ -20,4 +20,6 @@ public interface ExtApiService {
     List<LocalTable> getTables(Connection connection);
 
     void initDb(DbConfigPo dbConfigPos);
+
+    BaseResult<Long> generateCode(String tableNames);
 }

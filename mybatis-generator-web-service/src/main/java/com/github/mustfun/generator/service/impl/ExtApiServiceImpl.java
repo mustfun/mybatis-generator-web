@@ -116,6 +116,16 @@ public class ExtApiServiceImpl implements ExtApiService {
         ConnectionHolder.addConnection(configPo.getAddress(),connection);
     }
 
+    @Override
+    public BaseResult<Long> generateCode(String tableNames) {
+        BaseResult<Long> baseResult = new BaseResult<>();
+        String[] split = tableNames.trim().split(",");
+        for (String s : split) {
+            LOG.info("需要生成代码的表{}",s);
+        }
+        return baseResult;
+    }
+
     private void getColumns(DatabaseMetaData meta, String tableName) throws SQLException {
         ResultSet survey = meta.getColumns(null, null, tableName, null);
         while (survey.next()) {
