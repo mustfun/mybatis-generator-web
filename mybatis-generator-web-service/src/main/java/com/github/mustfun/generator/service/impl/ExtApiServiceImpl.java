@@ -14,7 +14,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -22,6 +24,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.ZipOutputStream;
 
 /**
  * @author dengzhiyuan
@@ -90,7 +93,7 @@ public class ExtApiServiceImpl implements ExtApiService {
                 LocalTable localTable = new LocalTable();
                 String tableName = rs.getString("TABLE_NAME");
                 LOG.info(tableName);
-                localTable.setName(tableName);
+                localTable.setTableName(tableName);
                 getColumns(dbMetData,tableName);
                 localTables.add(localTable);
             }
@@ -118,8 +121,15 @@ public class ExtApiServiceImpl implements ExtApiService {
     }
 
     @Override
-    public BaseResult<Long> generateCode(String tableNames, String address) {
-        BaseResult<Long> baseResult = new BaseResult<>();
+    public byte[] generateCode(String tableNames, String address) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        try {
+            try (ZipOutputStream zip = new ZipOutputStream(outputStream)) {
+            }
+        } catch (IOException e) {
+            LOG.error("generateCode IO Exception, {}",e);
+        }
+
         String[] split = tableNames.trim().split(",");
         try {
             Connection connection = ConnectionHolder.getConnection(address);
@@ -132,7 +142,7 @@ public class ExtApiServiceImpl implements ExtApiService {
         } catch (SQLException e) {
             LOG.error("生成表发生异常{}",e);
         }
-        return baseResult;
+        return outputStream.toByteArray();
     }
 
     /**
@@ -150,9 +160,9 @@ public class ExtApiServiceImpl implements ExtApiService {
         while (survey.next()) {
             LocalColumn localColumn = new LocalColumn();
             String columnName = survey.getString("COLUMN_NAME");
-            localColumn.setName(columnName);
+            localColumn.setColumnName(columnName);
             String columnType = survey.getString("TYPE_NAME");
-            localColumn.setType(columnType);
+            localColumn.setDataType(columnType);
             int size = survey.getInt("COLUMN_SIZE");
             localColumn.setSize(size);
             int nullable = survey.getInt("NULLABLE");
@@ -165,7 +175,7 @@ public class ExtApiServiceImpl implements ExtApiService {
             localColumn.setPosition(position);
             localColumns.add(localColumn);
         }
-        localTable.setName(tableName);
+        localTable.setTableName(tableName);
         localTable.setColumnList(localColumns);
         return localTable;
     }

@@ -15,7 +15,11 @@ import java.util.List;
 @Getter
 public class LocalTable {
     private Integer id;
-    private String name;
-
+    private String tableName;
+    private String comment;
+    private String className;
+    private String classLittleName;
     private List<LocalColumn> columnList;
+
+    private LocalColumn pk;
 }

@@ -1,0 +1,20 @@
+package ${package}.${moduleName}.repository;
+
+import ${package}.${moduleName}.entity.${className};
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+
+/**
+ * ${comments}
+ *
+ * @author ${author}
+ * @email ${email}
+ * @date ${datetime}
+ */
+@Repository
+public interface ${className}Repository extends CrudRepository<${className}, Long> {
+
+}

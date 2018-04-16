@@ -12,9 +12,19 @@ import lombok.Setter;
 @Setter
 @Getter
 public class LocalColumn {
-    private String name;
-    private String type;
+    private String columnName;
+    private String dataType;
+    private String columnComment;
     private Integer size;
     private Boolean nullable;
     private Integer position;
+
+    private String extra;
+    private String jpaColumnDefinition;
+    private String attrName;
+    private String attrLittleName;
+
+    private String attrType;
+    private String pk;
+    private String columnKey;
 }
