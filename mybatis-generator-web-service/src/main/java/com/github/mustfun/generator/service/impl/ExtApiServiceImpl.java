@@ -49,7 +49,7 @@ public class ExtApiServiceImpl implements ExtApiService {
             baseResult.setMessage("数据库连接失败");
             return baseResult;
         }
-        ConnectionHolder.addConnection(configPo.getAddress(),connection);
+        ConnectionHolder.addConnection(configPo.getDbName(),connection);
         //保存到文件中
         saveToLocalFile(configPo);
         baseResult.setStatus(1);
@@ -111,7 +111,7 @@ public class ExtApiServiceImpl implements ExtApiService {
      */
     @Override
     public void initDb(DbConfigPo configPo) {
-        if (ConnectionHolder.getConnection(configPo.getAddress())!=null){
+        if (ConnectionHolder.getConnection(configPo.getAddress()+configPo.getDbName())!=null){
             return ;
         }
         DbUtil dbUtil = new DbUtil(configPo.getAddress(), configPo.getDbName(), configPo.getUserName(), configPo.getPassword());
@@ -119,7 +119,7 @@ public class ExtApiServiceImpl implements ExtApiService {
         if (connection==null){
             return ;
         }
-        ConnectionHolder.addConnection(configPo.getAddress(),connection);
+        ConnectionHolder.addConnection(configPo.getAddress()+configPo.getDbName(),connection);
     }
 
     @Override

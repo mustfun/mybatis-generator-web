@@ -20,6 +20,7 @@ import org.xnio.IoUtils;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,9 +67,10 @@ public class IndexControllerImpl implements IndexController {
     public String tableList(Model model,@RequestParam("key") String key) {
         LOG.info(key);
         DbConfigPo dbConfigPo = JSON.parseObject(key, DbConfigPo.class);
-        List<LocalTable> tables = extApiService.getTables(ConnectionHolder.getConnection(dbConfigPo.getAddress()));
+        Connection connection = ConnectionHolder.getConnection(dbConfigPo.getAddress()+dbConfigPo.getDbName());
+        List<LocalTable> tables = extApiService.getTables(connection);
         model.addAttribute("tables", tables);
-        model.addAttribute("address", dbConfigPo.getAddress());
+        model.addAttribute("key", dbConfigPo.getAddress()+dbConfigPo.getDbName());
         return "core/tableList";
     }
 
