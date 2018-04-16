@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import ${package}.${moduleName}.dao.${className}Dao;
-import ${package}.${moduleName}.entity.${className}Entity;
+import ${package}.${moduleName}.po.${className}Po;
 import ${package}.${moduleName}.service.${className}Service;
 
 
@@ -18,12 +18,12 @@ public class ${className}ServiceImpl implements ${className}Service {
 	private ${className}Dao ${classLittleName}Dao;
 	
 	@Override
-	public ${className}Entity queryObject(${pk.attrType} ${pk.attrLittleName}){
+	public ${className}Po queryObject(${pk.attrType} ${pk.attrLittleName}){
 		return ${classLittleName}Dao.queryObject(${pk.attrLittleName});
 	}
 	
 	@Override
-	public List<${className}Entity> queryList(Map<String, Object> map){
+	public List<${className}Po> queryList(Map<String, Object> map){
 		return ${classLittleName}Dao.queryList(map);
 	}
 	
@@ -33,12 +33,12 @@ public class ${className}ServiceImpl implements ${className}Service {
 	}
 	
 	@Override
-	public void save(${className}Entity ${classLittleName}){
+	public void save(${className}Po ${classLittleName}){
 		${classLittleName}Dao.save(${classLittleName});
 	}
 	
 	@Override
-	public void update(${className}Entity ${classLittleName}){
+	public void update(${className}Po ${classLittleName}){
 		${classLittleName}Dao.update(${classLittleName});
 	}
 	

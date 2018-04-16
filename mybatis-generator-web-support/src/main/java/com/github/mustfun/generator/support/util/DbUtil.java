@@ -3,6 +3,7 @@ package com.github.mustfun.generator.support.util;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 
 /**
  * @author dengzhiyuan
@@ -29,8 +30,15 @@ public class DbUtil {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+        Properties props =new Properties();
+        props.setProperty("user", username);
+        props.setProperty("password", password);
+        //设置可以获取remarks信息
+        props.setProperty("remarks", "true");
+        //设置可以获取tables remarks信息
+        props.setProperty("useInformationSchema", "true");
         try {
-            conn = DriverManager.getConnection(url, username, password);
+            conn = DriverManager.getConnection(url, props);
         } catch (SQLException e) {
             e.printStackTrace();
         }

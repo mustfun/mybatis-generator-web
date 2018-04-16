@@ -1,6 +1,6 @@
 package ${package}.${moduleName}.service;
 
-import ${package}.${moduleName}.entity.${className}Entity;
+import ${package}.${moduleName}.po.${className}Po;
 
 import java.util.List;
 import java.util.Map;
@@ -14,15 +14,15 @@ import java.util.Map;
  */
 public interface ${className}Service {
 	
-	${className}Entity queryObject(${pk.attrType} ${pk.attrLittleName});
+	${className}Po queryObject(${pk.attrType} ${pk.attrLittleName});
 	
-	List<${className}Entity> queryList(Map<String, Object> map);
+	List<${className}Po> queryList(Map<String, Object> map);
 	
 	int queryTotal(Map<String, Object> map);
 	
-	void save(${className}Entity ${classLittleName});
+	void save(${className}Po ${classLittleName});
 	
-	void update(${className}Entity ${classLittleName});
+	void update(${className}Po ${classLittleName});
 	
 	void delete(${pk.attrType} ${pk.attrLittleName});
 	

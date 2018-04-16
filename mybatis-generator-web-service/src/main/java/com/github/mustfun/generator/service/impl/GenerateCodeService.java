@@ -35,7 +35,7 @@ public class GenerateCodeService {
 
     public static List<String> getTemplates(){
         List<String> templates = new ArrayList<>();
-        templates.add("temp/Entity.java.vm");
+        templates.add("temp/Po.java.vm");
         templates.add("temp/Dao.java.vm");
         templates.add("temp/Dao.xml.vm");
         templates.add("temp/Service.java.vm");
@@ -164,8 +164,8 @@ public class GenerateCodeService {
             packagePath += packageName.replace(".", File.separator) + File.separator + moduleName + File.separator;
         }
 
-        if (template.contains("Entity.java.vm" )) {
-            return packagePath + "entity" + File.separator + className + "Entity.java";
+        if (template.contains("Po.java.vm" )) {
+            return packagePath + "po" + File.separator + className + "Po.java";
         }
 
         if (template.contains("Dao.java.vm" )) {

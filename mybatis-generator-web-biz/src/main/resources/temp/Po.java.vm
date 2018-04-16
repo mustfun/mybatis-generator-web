@@ -1,4 +1,4 @@
-package ${package}.${moduleName}.entity;
+package ${package}.${moduleName}.po;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -7,29 +7,29 @@ import java.math.BigDecimal;
 #end
 
 /**
- * ${comments}
+ * ${comment}
  * 
  * @author ${author}
  * @email ${email}
  * @date ${datetime}
  */
-public class ${className}Entity implements Serializable {
+public class ${className}Po implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 #foreach ($column in $columns)
-	//$column.comments
+	//$column.columnComment
 	private $column.attrType $column.attrLittleName;
 #end
 
 #foreach ($column in $columns)
 	/**
-	 * 设置：${column.comments}
+	 * 设置：${column.columnComment}
 	 */
 	public void set${column.attrName}($column.attrType $column.attrLittleName) {
 		this.$column.attrLittleName = $column.attrLittleName;
 	}
 	/**
-	 * 获取：${column.comments}
+	 * 获取：${column.columnComment}
 	 */
 	public $column.attrType get${column.attrName}() {
 		return $column.attrLittleName;

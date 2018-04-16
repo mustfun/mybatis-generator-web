@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import ${package}.${moduleName}.entity.${className}Entity;
+import ${package}.${moduleName}.po.${className}Po;
 import ${package}.${moduleName}.service.${className}Service;
 import ${mainPath}.utils.PageUtils;
 import ${mainPath}.utils.Query;
@@ -42,7 +42,7 @@ public class ${className}Controller {
 		//查询列表数据
         Query query = new Query(params);
 
-		List<${className}Entity> ${classLittleName}List = ${classLittleName}Service.queryList(query);
+		List<${className}Po> ${classLittleName}List = ${classLittleName}Service.queryList(query);
 		int total = ${classLittleName}Service.queryTotal(query);
 		
 		PageUtils pageUtil = new PageUtils(${classLittleName}List, total, query.getLimit(), query.getPage());
@@ -57,7 +57,7 @@ public class ${className}Controller {
 	@RequestMapping("/info/{${pk.attrLittleName}}")
 	@RequiresPermissions("${moduleName}:${pathName}:info")
 	public R info(@PathVariable("${pk.attrLittleName}") ${pk.attrType} ${pk.attrLittleName}){
-		${className}Entity ${classLittleName} = ${classLittleName}Service.queryObject(${pk.attrLittleName});
+		${className}Po ${classLittleName} = ${classLittleName}Service.queryObject(${pk.attrLittleName});
 		
 		return R.ok().put("${classLittleName}", ${classLittleName});
 	}
@@ -67,7 +67,7 @@ public class ${className}Controller {
 	 */
 	@RequestMapping("/save")
 	@RequiresPermissions("${moduleName}:${pathName}:save")
-	public R save(@RequestBody ${className}Entity ${classLittleName}){
+	public R save(@RequestBody ${className}Po ${classLittleName}){
 		${classLittleName}Service.save(${classLittleName});
 		
 		return R.ok();
@@ -78,7 +78,7 @@ public class ${className}Controller {
 	 */
 	@RequestMapping("/update")
 	@RequiresPermissions("${moduleName}:${pathName}:update")
-	public R update(@RequestBody ${className}Entity ${classLittleName}){
+	public R update(@RequestBody ${className}Po ${classLittleName}){
 		${classLittleName}Service.update(${classLittleName});
 		
 		return R.ok();
