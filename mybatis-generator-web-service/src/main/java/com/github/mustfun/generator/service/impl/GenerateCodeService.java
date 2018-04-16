@@ -72,6 +72,10 @@ public class GenerateCodeService {
             if (!hasBigDecimal && attrType.equals("BigDecimal" )) {
                 hasBigDecimal = true;
             }
+            //BIGINT处理一下
+            if (column.getDataType().toUpperCase().equalsIgnoreCase("BITINT UNSIGNED")){
+                column.setDataType("BIGINT");
+            }
             columnsList.add(column);
         }
         table.setColumnList(columnsList);

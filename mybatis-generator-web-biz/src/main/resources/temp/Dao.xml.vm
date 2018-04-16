@@ -10,6 +10,25 @@
 		#end
     </resultMap>
 
+    <!--
+          选择性插入
+        -->
+    <sql id="Base_Insert_Selective">
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+			#foreach($column in $columns)
+				<if test="${column.attrLittleName}!=null">
+					${column.columnName},
+				</if>
+			#end
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			#foreach($column in $columns)
+                <if test="${column.attrLittleName}!=null">
+					#{${column.attrLittleName},jdbcType=${column.dataType},
+                </if>
+			#end
+        </trim>
+    </sql>
 
     <!--
         Where条件前缀子句
