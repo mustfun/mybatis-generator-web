@@ -1,0 +1,90 @@
+package com.github.mustfun.generator.service.impl;
+
+import com.github.mustfun.generator.model.po.DbConfigPo;
+import com.github.mustfun.generator.service.ExtApiService;
+import com.github.mustfun.generator.support.result.BaseResult;
+import com.github.mustfun.generator.support.util.DbUtil;
+import org.apache.commons.dbutils.DbUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * @author dengzhiyuan
+ * @version 1.0
+ * @date 2018/4/13
+ * @since 1.0
+ */
+@Service
+public class ExtApiServiceImpl implements ExtApiService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ExtApiServiceImpl.class);
+
+
+    @Override
+    public BaseResult<Long> saveDbConfig(DbConfigPo configPo) {
+        BaseResult<Long> baseResult = new BaseResult<>();
+        DbUtil dbUtil = new DbUtil(configPo.getAddress(), configPo.getDbName(), configPo.getUserName(), configPo.getPassword());
+        Connection connection = dbUtil.getConnection();
+        if (connection==null){
+            baseResult.setStatus(-2);
+            baseResult.setMessage("数据库连接失败");
+            return baseResult;
+        }
+        List<String> columnNameList = new ArrayList<>();
+        getTables(connection);
+        try {
+            DatabaseMetaData metaData = connection.getMetaData();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        baseResult.setStatus(1);
+        baseResult.setMessage("数据库添加成功");
+        return baseResult;
+    }
+
+    private void getTables(Connection connection) {
+        DatabaseMetaData dbMetData;
+        try {
+            dbMetData = connection.getMetaData();
+            String[] types = {"TABLE"};
+            ResultSet rs = dbMetData.getTables(null, null, "%", types);
+            while (rs.next()) {
+                String tableName = rs.getString("TABLE_NAME");
+                LOG.info(tableName);
+                getColumns(dbMetData,tableName);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void getColumns(DatabaseMetaData meta, String tableName) throws SQLException {
+        ResultSet survey = meta.getColumns(null, null, tableName, null);
+        while (survey.next()) {
+            String columnName = survey.getString("COLUMN_NAME");
+            LOG.info("column name=" + columnName);
+            String columnType = survey.getString("TYPE_NAME");
+            LOG.info("type:" + columnType);
+            int size = survey.getInt("COLUMN_SIZE");
+            LOG.info("size:" + size);
+            int nullable = survey.getInt("NULLABLE");
+            if (nullable == DatabaseMetaData.columnNullable) {
+                LOG.info("nullable true");
+            } else {
+                LOG.info("nullable false");
+            }
+            int position = survey.getInt("ORDINAL_POSITION");
+            LOG.info("position:" + position);
+        }
+    }
+}

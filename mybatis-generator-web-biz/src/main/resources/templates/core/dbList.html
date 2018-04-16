@@ -1,0 +1,163 @@
+﻿<!DOCTYPE >
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="common/receource">
+</head>
+
+<body>
+    <header th:include="common/header"></header>
+
+
+    <!-- START MAIN -->
+    <div id="main">
+        <!-- START WRAPPER -->
+        <div class="wrapper">
+
+            <aside th:include="common/sidebar"></aside>
+
+            <!-- START CONTENT -->
+            <section id="content">
+
+                <!--start container-->
+                <div class="container">
+                    <h4>数据库列表</h4>
+                    <table class="striped bordered">
+                        <thead>
+                        <tr>
+                            <th data-field="id">名称</th>
+                            <th data-field="name">地址</th>
+                            <th data-field="price">账号</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>Alvin</td>
+                            <td>Eclair</td>
+                            <td>$0.87</td>
+                        </tr>
+                        <tr>
+                            <td>Alan</td>
+                            <td>Jellybean</td>
+                            <td>$3.76</td>
+                        </tr>
+                        <tr>
+                            <td>Jonathan</td>
+                            <td>Lollipop</td>
+                            <td>$7.00</td>
+                        </tr>
+                        <tr>
+                            <td>Shannon</td>
+                            <td>KitKat</td>
+                            <td>$9.99</td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+                <!--end container-->
+            </section>
+            <!-- END CONTENT -->
+
+
+            <aside th:include="common/rightSidebar"></aside>
+
+        </div>
+        <!-- END WRAPPER -->
+
+        <div id="fixed-action-button" class="section">
+            <div class="row">
+                <div class="col s12 m12 l12">
+                    <div class="fixed-action-btn">
+                        <a class="btn-floating btn-large red" onclick="return addDbConfig()">
+                            <i class="large mdi-content-add"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- END MAIN -->
+    <div id="modal1" class="modal modal-fixed-footer" tabindex="0" _vimium-has-onclick-listener="" style="z-index: 1003; display: none; opacity: 0; top: 4%; transform: scaleX(0.8) scaleY(0.8);">
+        <div class="modal-content">
+            <h4>数据库配置</h4>
+            <form class="col s12" id="myDbForm">
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input placeholder="John Doe" id="dbAddress" name="address" type="text">
+                        <label  class="active">数据库地址</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input placeholder="请输入数据库名称" id="dbName" name="dbName" type="text">
+                        <label  class="active">数据库名称</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input placeholder="输入用户名" id="dbUserName" name="userName" type="text">
+                        <label  class="active">用户名</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input placeholder="请输入密码" id="dbPassword" name="password" type="password">
+                        <label class="active">密码</label>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="modal-action modal-close waves-effect waves-red btn-flat " onclick="moInstance.close()">取消</a>
+            <a href="#!" class="modal-action  waves-effect waves-green btn-flat " onclick="return submitDBConfig();">提交</a>
+        </div>
+    </div>
+
+    <footer th:include="common/footer"></footer>
+
+    <div th:include="common/scripts"></div>
+</body>
+<script>
+    var moInstance;
+    function addDbConfig() {
+        moInstance.open();
+    }
+
+    $(document).ready(function(){
+        var elem = document.querySelector('.modal');
+        moInstance = M.Modal.init(elem);
+
+        $('.modal').modal();
+    });
+    
+    function submitDBConfig() {
+        var formData={};
+        var t = $('#myDbForm').serializeArray();
+        $.each(t, function() {
+            formData[this.name] = this.value;
+        });
+        var url ='/api/save_db_config';
+        $.ajax({
+            url:url,
+            type:'POST', //GET
+            async:true,    //或false,是否异步
+            data:formData,
+            contentType:"application/x-www-form-urlencoded",
+            dataType : "json",
+            success:function(data,textStatus,jqXHR){
+                if(data['status']=="0"){
+                    alert("成功录入");
+                    window.location.href="/dbList";
+                }else{
+                    alert(data['message']);
+                }
+            },
+            error:function(xhr,textStatus){
+                alert("请求创建失败，请联系开发人员");
+            }
+        })
+    }
+    
+</script>
+</html>

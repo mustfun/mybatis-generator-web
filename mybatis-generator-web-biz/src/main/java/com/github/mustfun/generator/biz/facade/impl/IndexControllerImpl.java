@@ -27,4 +27,15 @@ public class IndexControllerImpl implements IndexController {
     }
 
 
+    @RequestMapping(value = "/dbList",method = RequestMethod.GET)
+    public String dbList() {
+        return "core/dbList";
+    }
+
+    @RequestMapping(value = "/modal",method = RequestMethod.GET)
+    public String modal() {
+        return "core/ui-modals";
+    }
+
+
 }
