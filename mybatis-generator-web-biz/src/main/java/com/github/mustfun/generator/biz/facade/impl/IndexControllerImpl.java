@@ -1,13 +1,26 @@
 package com.github.mustfun.generator.biz.facade.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.github.mustfun.generator.biz.facade.IndexController;
+import com.github.mustfun.generator.model.constants.FileConstants;
+import com.github.mustfun.generator.model.po.DbConfigPo;
 import com.github.mustfun.generator.service.CityService;
+import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.xnio.IoUtils;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author dengzhiyuan
@@ -19,6 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/")
 public class IndexControllerImpl implements IndexController {
 
+    private static final Logger LOG = LoggerFactory.getLogger(IndexControllerImpl.class);
 
     @Override
     @RequestMapping(value = "/index",method = RequestMethod.GET)
@@ -28,7 +42,18 @@ public class IndexControllerImpl implements IndexController {
 
 
     @RequestMapping(value = "/dbList",method = RequestMethod.GET)
-    public String dbList() {
+    public String dbList(Model model) {
+        try {
+            List<String> strings = IOUtils.readLines(new FileInputStream(FileConstants.TEMP_DB_CONFIG_DB), "UTF-8");
+            List<DbConfigPo> list = new ArrayList<>();
+            for (String string : strings) {
+                DbConfigPo dbConfigPos = JSON.parseObject(string, DbConfigPo.class);
+                list.add(dbConfigPos);
+            }
+            model.addAttribute("dbConfigList", list);
+        } catch (IOException e) {
+            LOG.error("{}",e);
+        }
         return "core/dbList";
     }
 

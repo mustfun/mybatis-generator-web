@@ -27,28 +27,16 @@
                             <th data-field="id">名称</th>
                             <th data-field="name">地址</th>
                             <th data-field="price">账号</th>
+                            <th data-field="operation">操作</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>Alvin</td>
-                            <td>Eclair</td>
-                            <td>$0.87</td>
-                        </tr>
-                        <tr>
-                            <td>Alan</td>
-                            <td>Jellybean</td>
-                            <td>$3.76</td>
-                        </tr>
-                        <tr>
-                            <td>Jonathan</td>
-                            <td>Lollipop</td>
-                            <td>$7.00</td>
-                        </tr>
-                        <tr>
-                            <td>Shannon</td>
-                            <td>KitKat</td>
-                            <td>$9.99</td>
+                        <!--/*@thymesVar id="config" type="com.github.mustfun.generator.model.po.DbConfigPo"*/-->
+                        <tr th:each="config : ${dbConfigList}">
+                            <td th:text="${config.dbName}"></td>
+                            <td th:text="${config.address}">Eclair</td>
+                            <td th:text="${config.userName}">$0.87</td>
+                            <td><a class="btn-floating waves-effect waves-light orange"><i class="mdi-action-done"></i>选择这个</a></td>
                         </tr>
                         </tbody>
                     </table>

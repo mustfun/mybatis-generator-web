@@ -12,6 +12,7 @@ import lombok.Setter;
 @Setter
 @Getter
 public class DbConfigPo {
+    private Long id;
     private String address;
     private String dbName;
     private String userName;

@@ -1,14 +1,23 @@
 package com.github.mustfun.generator.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.github.mustfun.generator.model.constants.FileConstants;
 import com.github.mustfun.generator.model.po.DbConfigPo;
 import com.github.mustfun.generator.service.ExtApiService;
 import com.github.mustfun.generator.support.result.BaseResult;
 import com.github.mustfun.generator.support.util.DbUtil;
 import org.apache.commons.dbutils.DbUtils;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
@@ -46,9 +55,28 @@ public class ExtApiServiceImpl implements ExtApiService {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        //保存到文件中
+        saveToLocalFile(configPo);
         baseResult.setStatus(1);
         baseResult.setMessage("数据库添加成功");
         return baseResult;
+    }
+
+    /**
+     * 保存到文件中
+     * @param configPo
+     */
+    private void saveToLocalFile(DbConfigPo configPo) {
+        try {
+            String s = JSON.toJSONString(configPo);
+            List<String> list = new ArrayList<>();
+            list.add(s);
+            try (OutputStream os = new FileOutputStream(FileConstants.TEMP_DB_CONFIG_DB, true)) {
+                IOUtils.writeLines(list, null, os, "UTF-8");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void getTables(Connection connection) {
