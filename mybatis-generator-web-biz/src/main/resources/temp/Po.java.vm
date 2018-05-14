@@ -18,7 +18,9 @@ public class ${className}Po implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 #foreach ($column in $columns)
-	//$column.columnComment
+    /**
+     * ${column.columnComment}
+     */
 	private $column.attrType $column.attrLittleName;
 #end
 
