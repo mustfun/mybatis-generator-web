@@ -38,11 +38,11 @@ public class ExtApiControllerImpl {
 
 
     @RequestMapping(value = "generate_code",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public void generateCode(@RequestParam("tableName") String tableNames,
+    public void generateCode(@RequestParam("tableName") String tableNames,@RequestParam("packageName") String packageName,
                                @RequestParam("address")String address, HttpServletResponse response) {
-        byte[] data = extApiService.generateCode(tableNames, address);
+        byte[] data = extApiService.generateCode(tableNames,packageName, address);
         response.reset();
-        response.setHeader("Content-Disposition", "attachment; filename=\"generator.zip\"");
+        response.setHeader("Content-Disposition", "attachment; filename=\"generator-web.zip\"");
         response.addHeader("Content-Length", "" + data.length);
         response.setContentType("application/octet-stream; charset=UTF-8");
 

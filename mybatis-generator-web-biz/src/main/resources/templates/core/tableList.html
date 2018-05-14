@@ -54,6 +54,15 @@
             <!-- END CONTENT -->
             <section>
                 <div th:class="container" style="margin-top: 20px">
+
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input placeholder="请输入包名，不输入默认com.github.mustfun" id="packageName" name="packageName" type="text">
+                            <label  class="active">包名</label>
+                        </div>
+                    </div>
+
+
                     <button class="btn waves-effect waves-light " type="submit" name="action" onclick="return generateCode()">立即生成
                         <i class="mdi-content-send right"></i>
                     </button>
@@ -107,7 +116,7 @@
                 tableName=tableName+this.value+",";
             }
         });
-        window.location.href="/api/generate_code?tableName="+encodeURIComponent(tableName)+"&address="+$("#addressId").val();
+        window.location.href="/api/generate_code?tableName="+encodeURIComponent(tableName)+"&address="+$("#addressId").val()+"&packageName="+$("#packageName").val();
         /*$.ajax({
             url:"/api/generate_code?tableName="+encodeURIComponent(tableName)+"&address="+$("#addressId").val(),
             type:'GET', //GET

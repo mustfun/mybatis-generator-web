@@ -21,5 +21,5 @@ public interface ExtApiService {
 
     void initDb(DbConfigPo dbConfigPos);
 
-    byte[] generateCode(String tableNames, String address);
+    byte[] generateCode(String tableNames,String packageName, String address);
 }

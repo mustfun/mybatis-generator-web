@@ -48,7 +48,7 @@ public class GenerateCodeService {
      * 生成代码
      */
     public static void generatorCode(LocalTable table,
-                                     List<LocalColumn> columns, ZipOutputStream zip) {
+                                     List<LocalColumn> columns, ZipOutputStream zip,String packageName) {
         //配置信息
         Configuration config = getConfig();
         boolean hasBigDecimal = false;
@@ -117,9 +117,11 @@ public class GenerateCodeService {
                 Template tpl = Velocity.getTemplate(template, "UTF-8");
                 tpl.merge(context, sw);
 
-
+                    if (packageName==null||StringUtils.isEmpty(packageName)){
+                        packageName = config.getString("package");
+                    }
                     //添加到zip
-                    zip.putNextEntry(new ZipEntry(getFileName(template, table.getClassName(), config.getString("package"), config.getString("moduleName"))));
+                    zip.putNextEntry(new ZipEntry(getFileName(template, table.getClassName(), packageName)));
                     IOUtils.write(sw.toString(), zip, "UTF-8");
                     zip.closeEntry();
 
@@ -162,10 +164,10 @@ public class GenerateCodeService {
     /**
      * 获取文件名
      */
-    public static String getFileName(String template, String className, String packageName, String moduleName) {
+    public static String getFileName(String template, String className, String packageName) {
         String packagePath = "main" + File.separator + "java" + File.separator;
         if (StringUtils.isNotBlank(packageName)) {
-            packagePath += packageName.replace(".", File.separator) + File.separator + moduleName + File.separator;
+            packagePath += packageName.replace(".", File.separator) + File.separator;
         }
 
         if (template.contains("Po.java.vm" )) {
@@ -193,7 +195,7 @@ public class GenerateCodeService {
         }
 
         if (template.contains("Dao.xml.vm" )) {
-            return "main" + File.separator + "resources" + File.separator + "mapper" + File.separator + moduleName + File.separator + className + "Dao.xml";
+            return "main" + File.separator + "resources" + File.separator+"mybatis" +File.separator + "mappers" + File.separator + className + "Dao.xml";
         }
 
         return null;
