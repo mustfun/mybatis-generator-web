@@ -5,9 +5,9 @@
 
     <!-- 可根据自己的需求，是否要使用 -->
     <resultMap type="${package}.${moduleName}.po.${className}Po" id="BaseResultMap">
-        #foreach($column in $columns)
-            <result property="${column.attrLittleName}" column="${column.columnName}"/>
-        #end
+#foreach($column in $columns)
+        <result property="${column.attrLittleName}" column="${column.columnName}"/>
+#end
     </resultMap>
 
     <!--
@@ -15,18 +15,18 @@
         -->
     <sql id="Base_Insert_Selective">
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            #foreach($column in $columns)
-                <if test="${column.attrLittleName}!=null">
-                    ${column.columnName},
-                </if>
-            #end
+#foreach($column in $columns)
+            <if test="${column.attrLittleName}!=null">
+                ${column.columnName},
+            </if>
+#end
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            #foreach($column in $columns)
-                <if test="${column.attrLittleName}!=null">
-                    #{${column.attrLittleName},jdbcType=${column.dataType},
-                </if>
-            #end
+#foreach($column in $columns)
+            <if test="${column.attrLittleName}!=null">
+                #{${column.attrLittleName},jdbcType=${column.dataType},
+            </if>
+#end
         </trim>
     </sql>
 
@@ -34,20 +34,20 @@
       数据库表的基本查询列名集合
     -->
     <sql id="Base_Column_List">
-        #foreach($column in $columns)
+#foreach($column in $columns)
         ${column.columnName},
-        #end
+#end
     </sql>
 
     <!--
         Where子句
       -->
     <sql id="Base_Query_Where">
-        #foreach($column in $columns)
-            <if test="${column.attrLittleName}!=null">
-                #{${column.attrLittleName},jdbcType=${column.dataType},
-            </if>
-        #end
+#foreach($column in $columns)
+        <if test="${column.attrLittleName}!=null">
+            #{${column.attrLittleName},jdbcType=${column.dataType},
+        </if>
+#end
     </sql>
 
     <!--
@@ -55,11 +55,11 @@
     -->
     <sql id="Base_Update_Column">
         <set>
-            #foreach($column in $columns)
-                <if test="${column.attrLittleName}!=null">
-                    #{${column.attrLittleName},jdbcType=${column.dataType},
-                </if>
-            #end
+#foreach($column in $columns)
+            <if test="${column.attrLittleName}!=null">
+                #{${column.attrLittleName},jdbcType=${column.dataType},
+            </if>
+#end
         </set>
     </sql>
 
@@ -89,11 +89,11 @@
         insert into cps_lock
         (<include refid="Base_Column_List"/>)
         values (
-        #foreach($column in $columns)
+#foreach($column in $columns)
             <if test="${column.attrLittleName}!=null">
                 #{${column.attrLittleName},jdbcType=${column.dataType},
             </if>
-        #end
+#end
         )
     </insert>
 
@@ -131,11 +131,11 @@
     <update id="updateByPrimaryKey" parameterType="${package}.${moduleName}.po.${className}Po">
         update ${tableName}
         <set>
-            #foreach($column in $columns)
-                <if test="${column.attrLittleName}!=null">
-                    ${column.columnName} = #{${column.attrLittleName},jdbcType=${column.dataType}},
-                </if>
-            #end
+#foreach($column in $columns)
+            <if test="${column.attrLittleName}!=null">
+                ${column.columnName} = #{${column.attrLittleName},jdbcType=${column.dataType}},
+            </if>
+#end
         </set>
         where ${pk.columnName} = #{${pk.attrLittleName},${pk.dataType}}
     </update>
@@ -146,16 +146,16 @@
     <insert id="batchInsert" parameterType="java.util.List">
         insert into ${tableName}
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            #foreach($column in $columns)
-                ${column.columnName},
-            #end
+#foreach($column in $columns)
+            ${column.columnName},
+#end
         </trim>
         values
         <foreach collection="list" index="index" item="item" separator=",">
             <trim prefix="(" suffix=")" suffixOverrides=",">
-                #foreach($column in $columns)
-                    #{${column.attrLittleName},jdbcType=${column.dataType}},
-                #end
+#foreach($column in $columns)
+                #{${column.attrLittleName},jdbcType=${column.dataType}},
+#end
             </trim>
         </foreach>
     </insert>
@@ -168,11 +168,11 @@
             update ${tableName}
             <set>
                 <trim suffixOverrides=",">
-                    #foreach($column in $columns)
-                        <if test="item.${column.attrLittleName}!=null">
-                            ${column.columnName} = #{${column.attrLittleName},jdbcType=${column.dataType}},
-                        </if>
-                    #end
+#foreach($column in $columns)
+                    <if test="item.${column.attrLittleName}!=null">
+                        ${column.columnName} = #{${column.attrLittleName},jdbcType=${column.dataType}},
+                    </if>
+#end
                 </trim>
             </set>
             <where>
@@ -188,11 +188,11 @@
    -->
     <sql id="Identifiers_Array_Conditions">
         <foreach collection="array" index="index" item="item" separator=" and ">
-            #foreach($column in $columns)
-                <if test="item == ${column.attrLittleName}">
-                    ${column.columnName} = #{${column.attrLittleName},jdbcType=${column.dataType}}
-                </if>
-            #end
+#foreach($column in $columns)
+            <if test="item == ${column.attrLittleName}">
+                ${column.columnName} = #{${column.attrLittleName},jdbcType=${column.dataType}}
+            </if>
+#end
         </foreach>
     </sql>
 
@@ -202,21 +202,21 @@
     <update id="upsert" parameterType="map">
         insert into ${tableName}
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            #foreach($column in $columns)
-                ${column.columnName},
-            #end
+#foreach($column in $columns)
+            ${column.columnName},
+#end
         </trim>
         values
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            #foreach($column in $columns)
-                #{${column.attrLittleName},jdbcType=${column.dataType},
-            #end
+#foreach($column in $columns)
+            #{${column.attrLittleName},jdbcType=${column.dataType},
+#end
         </trim>
         on duplicate key update
         <trim suffixOverrides=",">
-            #foreach($column in $columns)
-                #{${column.attrLittleName},jdbcType=${column.dataType},
-            #end
+#foreach($column in $columns)
+            #{${column.attrLittleName},jdbcType=${column.dataType},
+#end
         </trim>
     </update>
 
@@ -227,27 +227,27 @@
     <update id="upsertSelective" parameterType="map">
         insert into ${tableName}
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            #foreach($column in $columns)
-                <if test="${column.attrLittleName}!=null">
-                    ${column.columnName},
-                </if>
-            #end
+#foreach($column in $columns)
+            <if test="${column.attrLittleName}!=null">
+                ${column.columnName},
+            </if>
+#end
         </trim>
         values
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            #foreach($column in $columns)
-                <if test="${column.attrLittleName}!=null">
-                    ${column.columnName} = #{${column.attrLittleName},jdbcType=${column.dataType}},
-                </if>
-            #end
+#foreach($column in $columns)
+            <if test="${column.attrLittleName}!=null">
+                ${column.columnName} = #{${column.attrLittleName},jdbcType=${column.dataType}},
+            </if>
+#end
         </trim>
         on duplicate key update
         <trim suffixOverrides=",">
-            #foreach($column in $columns)
-                <if test="${column.attrLittleName}!=null">
-                    ${column.columnName} = #{${column.attrLittleName},jdbcType=${column.dataType}},
-                </if>
-            #end
+#foreach($column in $columns)
+            <if test="${column.attrLittleName}!=null">
+                ${column.columnName} = #{${column.attrLittleName},jdbcType=${column.dataType}},
+            </if>
+#end
         </trim>
     </update>
 
