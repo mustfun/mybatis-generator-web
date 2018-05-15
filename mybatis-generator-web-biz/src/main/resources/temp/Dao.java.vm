@@ -1,16 +1,60 @@
 package ${package}.dao;
 
 import ${package}.po.${className}Po;
+import com.github.pagehelper.Page;
+import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
- * ${comment}
+ * ${comment}的dao层
  * 
  * @author ${author}
  * @email ${email}
  * @date ${datetime}
+ * @since jdk1.8
  */
 @Mapper
-public interface ${className}Dao extends BaseDao<${className}Po> {
-	
+public interface ${className}Dao {
+
+    /*<AUTOGEN--BEGIN>*/
+
+    Page<${className}Po> selectPaged(RowBounds rowBounds);
+
+    Integer deleteByPrimaryKey(${pk.attrType} ${pk.attrLittleName});
+
+    Integer insert(${className}Po ${classLittleName});
+
+    Integer insertSelective(${className}Po ${classLittleName});
+
+    Integer insertSelectiveIgnore(${className}Po ${classLittleName});
+
+    Integer updateByPrimaryKeySelective(${className}Po ${classLittleName});
+
+    Integer updateByPrimaryKey(${className}Po ${classLittleName});
+
+    Integer batchInsert(List<${className}Po> list);
+
+    Integer batchUpdate(List<${className}Po> list);
+
+    /**
+    * 存在即更新
+    * @param map
+    * @return
+    */
+    Integer upsert(${className}Po ${classLittleName});
+
+    /**
+    * 存在即更新，可选择键
+    * @param map
+    * @return
+    */
+    Integer upsertSelective(${className}Po ${classLittleName});
+
+    List<${className}Po> query(${className}Po ${classLittleName});
+
+    Long queryTotal();
+
+    Integer deleteBatch(List<${pk.attrType}> list);
+
+    /*<AUTOGEN--END>*/
 }

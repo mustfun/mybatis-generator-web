@@ -1,0 +1,31 @@
+package ${package}.po;
+
+import lombok.Getter;
+import lombok.Setter;
+
+import java.io.Serializable;
+import java.util.Date;
+#if(${hasBigDecimal})
+import java.math.BigDecimal;
+#end
+
+/**
+ * ${comment}
+ * 
+ * @author ${author}
+ * @mail ${email}
+ * @since jdk1.8
+ * @date ${datetime}
+ */
+@Setter
+@Getter
+public class ${className}Req implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
+#foreach ($column in $columns)
+    /**
+    *$column.columnComment
+    */
+	private $column.attrType $column.attrLittleName;
+#end
+}

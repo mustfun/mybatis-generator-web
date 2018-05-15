@@ -199,7 +199,7 @@
     <!--
       存在即更新否则插入
     -->
-    <update id="upsert" parameterType="map">
+    <update id="upsert" parameterType="${package}.po.${className}Po">
         insert into ${tableName}
         <trim prefix="(" suffix=")" suffixOverrides=",">
 #foreach($column in $columns)
@@ -224,7 +224,7 @@
     <!--
       带有空值检查的存在即更新否则插入
     -->
-    <update id="upsertSelective" parameterType="map">
+    <update id="upsertSelective" parameterType="${package}.po.${className}Po">
         insert into ${tableName}
         <trim prefix="(" suffix=")" suffixOverrides=",">
 #foreach($column in $columns)
@@ -260,14 +260,14 @@
         </where>
     </select>
 
-    <select id="queryTotal" resultType="int">
+    <select id="queryTotal" resultType="long">
 		select count(*) from ${tableName} 
 	</select>
 
 
     <delete id="deleteBatch">
         delete from ${tableName} where ${pk.columnName} in
-        <foreach item="${pk.attrLittleName}" collection="array" open="(" separator="," close=")">
+        <foreach item="${pk.attrLittleName}" collection="list" open="(" separator="," close=")">
             #{${pk.attrLittleName}}
         </foreach>
     </delete>

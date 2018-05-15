@@ -37,6 +37,8 @@ public class GenerateCodeService {
         List<String> templates = new ArrayList<>();
         templates.add("temp/Po.java.vm");
         templates.add("temp/Bo.java.vm");
+        templates.add("temp/Req.java.vm");
+        templates.add("temp/Resp.java.vm");
         templates.add("temp/Dao.java.vm");
         templates.add("temp/Dao.xml.vm");
         templates.add("temp/Service.java.vm");
@@ -178,12 +180,18 @@ public class GenerateCodeService {
             return packagePath +"model"+ File.separator + "bo" + File.separator + className + "Bo.java";
         }
 
+        if (template.contains("Req.java.vm" )) {
+            return packagePath +"model"+ File.separator + "req" + File.separator + className + "Req.java";
+        }
+
+        if (template.contains("Resp.java.vm" )) {
+            return packagePath +"model"+ File.separator + "resp" + File.separator + className + "Resp.java";
+        }
+
 
         if (template.contains("Dao.java.vm" )) {
             return packagePath + "dao" + File.separator + className + "Dao.java";
         }
-
-
 
         if (template.contains("Service.java.vm" )) {
             return packagePath + "service" + File.separator + className + "Service.java";
@@ -198,7 +206,7 @@ public class GenerateCodeService {
         }
 
         if (template.contains("Dao.xml.vm" )) {
-            return "main" + File.separator + "resources" + File.separator+"mybatis" +File.separator + "mappers" + File.separator + className + "Dao.xml";
+            return "mybatis" +File.separator + "mappers" + File.separator + className + "Dao.xml";
         }
 
         return null;
