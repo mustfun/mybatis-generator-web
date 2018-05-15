@@ -21,42 +21,88 @@ import ${package}.service.${className}Service;
  */
 @Service("${classLittleName}Service")
 public class ${className}ServiceImpl implements ${className}Service {
-	@Autowired
-	private ${className}Dao ${classLittleName}Dao;
-	
+	/*<AUTOGEN--BEGIN>*/
+
+    @Autowired
+	public ${className}Dao ${classLittleName}Dao;
+
+
+
 	@Override
-	public ${className}Po queryObject(${pk.attrType} ${pk.attrLittleName}){
-		return ${classLittleName}Dao.queryObject(${pk.attrLittleName});
+    public Page<${className}Po> selectPaged(RowBounds rowBounds){
+        return ${classLittleName}Dao.selectPaged(rowBounds);
 	}
-	
-	@Override
-	public List<${className}Po> queryList(Map<String, Object> map){
-		return ${classLittleName}Dao.queryList(map);
+
+    @Override
+    public ${className}Po selectByPrimaryKey(${pk.attrType} ${pk.attrLittleName}){
+        return ${classLittleName}Dao.selectByPrimaryKey(${pk.attrLittleName});
 	}
-	
-	@Override
-	public int queryTotal(Map<String, Object> map){
-		return ${classLittleName}Dao.queryTotal(map);
+
+    @Override
+    public Integer deleteByPrimaryKey(${pk.attrType} ${pk.attrLittleName}){
+        return ${classLittleName}Dao.deleteByPrimaryKey(${pk.attrLittleName});
 	}
-	
-	@Override
-	public void save(${className}Po ${classLittleName}){
-		${classLittleName}Dao.save(${classLittleName});
+
+    @Override
+    public Integer insert(${className}Po ${classLittleName}){
+        return ${classLittleName}Dao.insert(${classLittleName});
 	}
-	
-	@Override
-	public void update(${className}Po ${classLittleName}){
-		${classLittleName}Dao.update(${classLittleName});
+
+    @Override
+    public Integer insertSelective(${className}Po ${classLittleName}){
+        return ${classLittleName}Dao.insertSelective(${classLittleName});
 	}
-	
-	@Override
-	public void delete(${pk.attrType} ${pk.attrLittleName}){
-		${classLittleName}Dao.delete(${pk.attrLittleName});
+
+    public Integer insertSelectiveIgnore(${className}Po ${classLittleName}){
+        return ${classLittleName}Dao.insertSelectiveIgnore(${classLittleName});
 	}
-	
-	@Override
-	public void deleteBatch(${pk.attrType}[] ${pk.attrLittleName}s){
-		${classLittleName}Dao.deleteBatch(${pk.attrLittleName}s);
+
+    public Integer updateByPrimaryKeySelective(${className}Po ${classLittleName}){
+        return ${classLittleName}Dao.updateByPrimaryKeySelective(${classLittleName});
 	}
+
+    public Integer updateByPrimaryKey(${className}Po ${classLittleName}){
+        return ${classLittleName}Dao.updateByPrimaryKey(${classLittleName});
+	}
+
+    public Integer batchInsert(List<${className}Po> list){
+        return ${classLittleName}Dao.batchInsert(list);
+	}
+
+    public Integer batchUpdate(List<${className}Po> list){
+        return ${classLittleName}Dao.batchUpdate(list);
+	}
+
+    /**
+    * 存在即更新
+    * @param map
+    * @return
+    */
+    public Integer upsert(${className}Po ${classLittleName}){
+        return ${classLittleName}Dao.upsert(${classLittleName});
+	}
+
+    /**
+    * 存在即更新，可选择具体属性
+    * @param map
+    * @return
+    */
+    public Integer upsertSelective(${className}Po ${classLittleName}){
+        return ${classLittleName}Dao.upsertSelective(${classLittleName});
+	}
+
+    public List<${className}Po> query(${className}Po ${classLittleName}){
+        return ${classLittleName}Dao.query(${classLittleName});
+	}
+
+    public Long queryTotal(){
+        return ${classLittleName}Dao.queryTotal();
+	}
+
+    public Integer deleteBatch(List<${pk.attrType}> list){
+        return ${classLittleName}Dao.deleteBatch(list);
+	}
+
+	/*<AUTOGEN--END>*/
 	
 }

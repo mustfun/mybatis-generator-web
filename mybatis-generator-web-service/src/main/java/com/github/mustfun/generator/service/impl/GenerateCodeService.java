@@ -35,6 +35,7 @@ public class GenerateCodeService {
 
     public static List<String> getTemplates(){
         List<String> templates = new ArrayList<>();
+        templates.add("temp/Result.java.vm");
         templates.add("temp/Po.java.vm");
         templates.add("temp/Bo.java.vm");
         templates.add("temp/Req.java.vm");
@@ -170,6 +171,9 @@ public class GenerateCodeService {
         String packagePath = "java" + File.separator;
         if (StringUtils.isNotBlank(packageName)) {
             packagePath += packageName.replace(".", File.separator) + File.separator;
+        }
+        if (template.contains("Result.java.vm")) {
+            return packagePath +"model" + File.separator + "Result.java";
         }
 
         if (template.contains("Po.java.vm" )) {

@@ -20,6 +20,8 @@ public interface ${className}Dao {
 
     Page<${className}Po> selectPaged(RowBounds rowBounds);
 
+    ${className}Po selectByPrimaryKey(${pk.attrType} ${pk.attrLittleName});
+
     Integer deleteByPrimaryKey(${pk.attrType} ${pk.attrLittleName});
 
     Integer insert(${className}Po ${classLittleName});
@@ -44,7 +46,7 @@ public interface ${className}Dao {
     Integer upsert(${className}Po ${classLittleName});
 
     /**
-    * 存在即更新，可选择键
+    * 存在即更新，可选择具体属性
     * @param map
     * @return
     */
@@ -57,4 +59,5 @@ public interface ${className}Dao {
     Integer deleteBatch(List<${pk.attrType}> list);
 
     /*<AUTOGEN--END>*/
+
 }

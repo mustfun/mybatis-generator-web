@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * ${comment}
+ * ${comment} service层
  * 
  * @author ${author}
  * @email ${email}
@@ -14,18 +14,49 @@ import java.util.Map;
  * @since jdk 1.8
  */
 public interface ${className}Service {
-	
-	${className}Po queryObject(${pk.attrType} ${pk.attrLittleName});
-	
-	List<${className}Po> queryList(Map<String, Object> map);
-	
-	int queryTotal(Map<String, Object> map);
-	
-	void save(${className}Po ${classLittleName});
-	
-	void update(${className}Po ${classLittleName});
-	
-	void delete(${pk.attrType} ${pk.attrLittleName});
-	
-	void deleteBatch(${pk.attrType}[] ${pk.attrLittleName}s);
+
+    /*<AUTOGEN--BEGIN>*/
+
+    Page<${className}Po> selectPaged(RowBounds rowBounds);
+
+    ${className}Po selectByPrimaryKey(${pk.attrType} ${pk.attrLittleName});
+
+    Integer deleteByPrimaryKey(${pk.attrType} ${pk.attrLittleName});
+
+    Integer insert(${className}Po ${classLittleName});
+
+    Integer insertSelective(${className}Po ${classLittleName});
+
+    Integer insertSelectiveIgnore(${className}Po ${classLittleName});
+
+    Integer updateByPrimaryKeySelective(${className}Po ${classLittleName});
+
+    Integer updateByPrimaryKey(${className}Po ${classLittleName});
+
+    Integer batchInsert(List<${className}Po> list);
+
+    Integer batchUpdate(List<${className}Po> list);
+
+    /**
+    * 存在即更新
+    * @param map
+    * @return
+    */
+    Integer upsert(${className}Po ${classLittleName});
+
+    /**
+    * 存在即更新，可选择具体属性
+    * @param map
+    * @return
+    */
+    Integer upsertSelective(${className}Po ${classLittleName});
+
+    List<${className}Po> query(${className}Po ${classLittleName});
+
+    Long queryTotal();
+
+    Integer deleteBatch(List<${pk.attrType}> list);
+
+    /*<AUTOGEN--END>*/
+
 }
