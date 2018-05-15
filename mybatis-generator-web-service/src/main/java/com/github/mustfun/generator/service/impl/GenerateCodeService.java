@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -32,6 +33,8 @@ import java.util.zip.ZipOutputStream;
 public class GenerateCodeService {
 
     private static final Logger LOG = LoggerFactory.getLogger(GenerateCodeService.class);
+
+    private static ConcurrentHashMap<String, Integer> templateGenerateTimeMap = new ConcurrentHashMap<>(10);
 
     public static List<String> getTemplates(){
         List<String> templates = new ArrayList<>();
@@ -115,6 +118,10 @@ public class GenerateCodeService {
         //获取模板列表
         List<String> templates = getTemplates();
         for (String template : templates) {
+            if(!checkNeedGenerate(template)){
+                continue;
+            }
+
             //渲染模板
             try (StringWriter sw = new StringWriter()) {
                 Template tpl = Velocity.getTemplate(template, "UTF-8");
@@ -133,6 +140,18 @@ public class GenerateCodeService {
                 throw new RuntimeException("渲染模板失败，表名：" + table.getTableName(), e);
             }
         }
+    }
+
+    private  static boolean checkNeedGenerate(String template) {
+        if (template.contains("Result.java.vm")){
+            Integer integer = templateGenerateTimeMap.get(template);
+            if (integer==null){
+                templateGenerateTimeMap.put(template,1);
+            }else if(integer>0){
+                return false;
+            }
+        }
+        return true;
     }
 
 
