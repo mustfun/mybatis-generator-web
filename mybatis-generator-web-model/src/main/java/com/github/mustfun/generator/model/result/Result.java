@@ -28,6 +28,18 @@ public class Result<T> implements Serializable {
         this.data = data;
     }
 
+    public static Result ok(){
+        Result result = new Result<>();
+        result.setStatus(0);
+        result.setMessage("success");
+        return result;
+    }
+
+    public Result<T> put(T t){
+        this.setData(t);
+        return this;
+    }
+
     public Integer getStatus() {
         return status;
     }

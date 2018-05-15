@@ -3,6 +3,7 @@ package ${package}.controller;
 import java.util.List;
 import java.util.Map;
 
+import com.github.mustfun.generator.model.result.Result;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,65 +36,75 @@ public class ${className}Controller {
 	private ${className}Service ${classLittleName}Service;
 	
 	/**
-	 * 列表
+	 * 分页查询数据
 	 */
-	@RequestMapping("/list")
-	@RequiresPermissions("${pathName}:list")
-	public R list(@RequestParam Map<String, Object> params){
-		//查询列表数据
-        Query query = new Query(params);
+    @RequestMapping("/select_paged")
+    public Result<Page<${className}Po>> selectPaged(RowBounds rowBounds){
+		Result<Page<${className}Po>> pageResult = new Result<>();
+        Page<${className}Po> page =	${classLittleName}Service.selectPaged(rowBounds);
+        pageResult.setData(page);
+        return pageResult;
+    }
 
-		List<${className}Po> ${classLittleName}List = ${classLittleName}Service.queryList(query);
-		int total = ${classLittleName}Service.queryTotal(query);
-		
-		PageUtils pageUtil = new PageUtils(${classLittleName}List, total, query.getLimit(), query.getPage());
-		
-		return R.ok().put("page", pageUtil);
-	}
-	
-	
-	/**
-	 * 信息
-	 */
-	@RequestMapping("/info/{${pk.attrLittleName}}")
-	@RequiresPermissions("${pathName}:info")
-	public R info(@PathVariable("${pk.attrLittleName}") ${pk.attrType} ${pk.attrLittleName}){
-		${className}Po ${classLittleName} = ${classLittleName}Service.queryObject(${pk.attrLittleName});
-		
-		return R.ok().put("${classLittleName}", ${classLittleName});
-	}
-	
-	/**
-	 * 保存
-	 */
-	@RequestMapping("/save")
-	@RequiresPermissions("${pathName}:save")
-	public R save(@RequestBody ${className}Po ${classLittleName}){
-		${classLittleName}Service.save(${classLittleName});
-		
-		return R.ok();
-	}
-	
-	/**
-	 * 修改
-	 */
-	@RequestMapping("/update")
-	@RequiresPermissions("${pathName}:update")
-	public R update(@RequestBody ${className}Po ${classLittleName}){
-		${classLittleName}Service.update(${classLittleName});
-		
-		return R.ok();
-	}
-	
-	/**
-	 * 删除
-	 */
-	@RequestMapping("/delete")
-	@RequiresPermissions("${pathName}:delete")
-	public R delete(@RequestBody ${pk.attrType}[] ${pk.attrLittleName}s){
-		${classLittleName}Service.deleteBatch(${pk.attrLittleName}s);
-		
-		return R.ok();
-	}
-	
+    /**
+    * 通过id查询
+	* @return
+	*/
+    @RequestMapping("/select_by_id")
+    public Result<${className}Po> selectByPrimaryKey(${pk.attrType} ${pk.attrLittleName}){
+        Result<${className}Po> result = new Result<>();
+		${className}Po po = ${classLittleName}Service.selectByPrimaryKey(${pk.attrLittleName});
+		result.setData(po);
+        return result;
+    }
+
+    /**
+    * 通过ID删除
+	* @return
+	*/
+    @RequestMapping("/delete_by_id")
+    public Result<Integer> deleteByPrimaryKey(${pk.attrType} ${pk.attrLittleName}){
+        Result<Integer> result = new Result<>();
+        Integer num = ${classLittleName}Service.deleteByPrimaryKey(${pk.attrLittleName});
+        result.setData(num);
+        return result;
+    }
+
+    /**
+    * 新增数据
+	* @return
+	*/
+    @RequestMapping("/save_${classLittleName}")
+    public Result<Integer> insert(${className}Po ${classLittleName}){
+        Result<Integer> result = new Result<>();
+        Integer num	= ${classLittleName}Service.insertSelective(${classLittleName});
+        result.setData(num);
+        return result;
+    }
+
+    /**
+     * 修改数据
+     * @return
+     */
+    @RequestMapping("/update_${classLittleName}")
+    public Integer updateByPrimaryKeySelective(${className}Po ${classLittleName}){
+        Result<Integer> result = new Result<>();
+        Integer num = ${classLittleName}Service.updateByPrimaryKeySelective(${classLittleName});
+        result.setData(num);
+        return result;
+    }
+
+
+    /**
+     * 查询列表
+     * @return
+     */
+    @RequestMapping("/query_list")
+    public Result<List<${className}Po>> queryByCondition(${className}Po ${classLittleName}){
+        Result<List<${className}Po>> result = new Result<>();
+        List<${className}Po> list =	${classLittleName}Service.query(${classLittleName});
+    	result.setData(list);
+        return result;
+    }
+
 }

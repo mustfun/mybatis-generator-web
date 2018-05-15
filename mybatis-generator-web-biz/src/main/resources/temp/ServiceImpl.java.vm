@@ -53,22 +53,27 @@ public class ${className}ServiceImpl implements ${className}Service {
         return ${classLittleName}Dao.insertSelective(${classLittleName});
 	}
 
+    @Override
     public Integer insertSelectiveIgnore(${className}Po ${classLittleName}){
         return ${classLittleName}Dao.insertSelectiveIgnore(${classLittleName});
 	}
 
+    @Override
     public Integer updateByPrimaryKeySelective(${className}Po ${classLittleName}){
         return ${classLittleName}Dao.updateByPrimaryKeySelective(${classLittleName});
 	}
 
+    @Override
     public Integer updateByPrimaryKey(${className}Po ${classLittleName}){
         return ${classLittleName}Dao.updateByPrimaryKey(${classLittleName});
 	}
 
+    @Override
     public Integer batchInsert(List<${className}Po> list){
         return ${classLittleName}Dao.batchInsert(list);
 	}
 
+    @Override
     public Integer batchUpdate(List<${className}Po> list){
         return ${classLittleName}Dao.batchUpdate(list);
 	}
@@ -78,6 +83,7 @@ public class ${className}ServiceImpl implements ${className}Service {
     * @param map
     * @return
     */
+    @Override
     public Integer upsert(${className}Po ${classLittleName}){
         return ${classLittleName}Dao.upsert(${classLittleName});
 	}
@@ -87,18 +93,22 @@ public class ${className}ServiceImpl implements ${className}Service {
     * @param map
     * @return
     */
+    @Override
     public Integer upsertSelective(${className}Po ${classLittleName}){
         return ${classLittleName}Dao.upsertSelective(${classLittleName});
 	}
 
+    @Override
     public List<${className}Po> query(${className}Po ${classLittleName}){
         return ${classLittleName}Dao.query(${classLittleName});
 	}
 
+    @Override
     public Long queryTotal(){
         return ${classLittleName}Dao.queryTotal();
 	}
 
+    @Override
     public Integer deleteBatch(List<${pk.attrType}> list){
         return ${classLittleName}Dao.deleteBatch(list);
 	}
