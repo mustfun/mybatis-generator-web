@@ -1,6 +1,6 @@
 # 自动代码生成工具  
 
-[![Build Status](https://travis-ci.org/mustfun/warning-control.svg?branch=master)](https://travis-ci.org/mustfun/warning-control)
+[![Build Status](https://travis-ci.org/mustfun/mybatis-generator-web.svg?branch=master)](https://travis-ci.org/mustfun/mybatis-generator-web)
 [![codecov](https://codecov.io/gh/mustfun/warning-control/branch/master/graph/badge.svg)](https://codecov.io/gh/mustfun/warning-control)
 ![GitHub release](https://img.shields.io/github/release/mustfun/warning-control.svg)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.mustfun/warning-control/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.mustfun/warning-control/badge.svg)

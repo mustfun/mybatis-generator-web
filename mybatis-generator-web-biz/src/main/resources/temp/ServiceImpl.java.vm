@@ -11,7 +11,14 @@ import ${package}.po.${className}Po;
 import ${package}.service.${className}Service;
 
 
-
+/**
+ * ${comment}
+ *
+ * @author ${author}
+ * @email ${email}
+ * @date ${datetime}
+ * @since jdk 1.8
+ */
 @Service("${classLittleName}Service")
 public class ${className}ServiceImpl implements ${className}Service {
 	@Autowired

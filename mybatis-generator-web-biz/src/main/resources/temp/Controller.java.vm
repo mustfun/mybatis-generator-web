@@ -22,10 +22,11 @@ import ${mainPath}.utils.R;
 
 /**
  * ${comment}
- * 
+ *
  * @author ${author}
  * @email ${email}
  * @date ${datetime}
+ * @since jdk 1.8
  */
 @RestController
 @RequestMapping("/${pathName}")

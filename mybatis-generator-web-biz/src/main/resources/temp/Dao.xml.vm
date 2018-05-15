@@ -72,11 +72,21 @@
         from ${tableName}
     </select>
 
+    <!--
+      根据主键查询数据库表
+    -->
+    <select id="selectByPrimaryKey" parameterType="${pk.attrType}" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from  ${tableName}
+        where   ${pk.columnName} = #{${pk.attrLittleName},${pk.dataType}}
+    </select>
+
 
     <!--
       根据主键删除数据库表中的记录
     -->
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <delete id="deleteByPrimaryKey" parameterType="${pk.attrType}">
         delete FROM ${tableName}
         where  ${pk.columnName} = #{${pk.attrLittleName},${pk.dataType}}
     </delete>
