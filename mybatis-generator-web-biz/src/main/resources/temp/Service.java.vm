@@ -1,6 +1,6 @@
-package ${package}.${moduleName}.service;
+package ${package}.service;
 
-import ${package}.${moduleName}.po.${className}Po;
+import ${package}.po.${className}Po;
 
 import java.util.List;
 import java.util.Map;

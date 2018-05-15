@@ -104,7 +104,6 @@ public class GenerateCodeService {
         map.put("hasBigDecimal", hasBigDecimal);
         map.put("mainPath", mainPath);
         map.put("package", packageName);
-        map.put("moduleName", config.getString("moduleName"));
         map.put("author", config.getString("author" ));
         map.put("email", config.getString("email" ));
         map.put("datetime", DateUtils.format(new Date(), DateUtils.DATE_TIME_PATTERN));
@@ -122,7 +121,7 @@ public class GenerateCodeService {
                         packageName = config.getString("package");
                     }
                     //添加到zip
-                    zip.putNextEntry(new ZipEntry(getFileName(template, table.getClassName(), packageName)));
+                    zip.putNextEntry(new ZipEntry(Objects.requireNonNull(getFileName(template, table.getClassName(), packageName))));
                     IOUtils.write(sw.toString(), zip, "UTF-8");
                     zip.closeEntry();
 
@@ -166,7 +165,7 @@ public class GenerateCodeService {
      * 获取文件名
      */
     public static String getFileName(String template, String className, String packageName) {
-        String packagePath = "main" + File.separator + "java" + File.separator;
+        String packagePath = "java" + File.separator;
         if (StringUtils.isNotBlank(packageName)) {
             packagePath += packageName.replace(".", File.separator) + File.separator;
         }

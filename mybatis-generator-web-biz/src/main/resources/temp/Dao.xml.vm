@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="${package}.${moduleName}.dao.${className}Dao">
+<mapper namespace="${package}.dao.${className}Dao">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="${package}.${moduleName}.po.${className}Po" id="BaseResultMap">
+    <resultMap type="${package}.po.${className}Po" id="BaseResultMap">
 #foreach($column in $columns)
         <result property="${column.attrLittleName}" column="${column.columnName}"/>
 #end
@@ -85,7 +85,7 @@
       添加一条记录到数据库表中
     -->
     <insert id="insert" useGeneratedKeys="true" keyProperty="id"
-            parameterType="${package}.${moduleName}.po.${className}Po">
+            parameterType="${package}.po.${className}Po">
         insert into cps_lock
         (<include refid="Base_Column_List"/>)
         values (
@@ -101,7 +101,7 @@
      有选择的添加一条记录到数据库表中
    -->
     <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id"
-            parameterType="${package}.${moduleName}.po.${className}Po">
+            parameterType="${package}.po.${className}Po">
         insert into ${tableName}
         <include refid="Base_Insert_Selective"/>
     </insert>
@@ -110,7 +110,7 @@
       有选择的可忽略添加一条记录到数据库表中
     -->
     <insert id="insertSelectiveIgnore" useGeneratedKeys="true" keyProperty="id"
-            parameterType="${package}.${moduleName}.po.${className}Po">
+            parameterType="${package}.po.${className}Po">
         insert ignore into ${tableName}
         <include refid="Base_Insert_Selective"/>
     </insert>
@@ -118,7 +118,7 @@
     <!--
       根据主键有选择的更新数据库表
     -->
-    <update id="updateByPrimaryKeySelective" parameterType="${package}.${moduleName}.po.${className}Po">
+    <update id="updateByPrimaryKeySelective" parameterType="${package}.po.${className}Po">
         update ${tableName}
         <include refid="Base_Update_Column"></include>
         where ${pk.columnName} = #{${pk.attrLittleName},${pk.dataType}}
@@ -128,7 +128,7 @@
     <!--
       根据主键更新数据库表
     -->
-    <update id="updateByPrimaryKey" parameterType="${package}.${moduleName}.po.${className}Po">
+    <update id="updateByPrimaryKey" parameterType="${package}.po.${className}Po">
         update ${tableName}
         <set>
 #foreach($column in $columns)
@@ -251,7 +251,7 @@
         </trim>
     </update>
 
-    <select id="query" resultMap="BaseResultMap" parameterType="${package}.${moduleName}.po.${className}Po">
+    <select id="query" resultMap="BaseResultMap" parameterType="${package}.po.${className}Po">
         select
         <include refid="Base_Column_List"/>
         from ${tableName}

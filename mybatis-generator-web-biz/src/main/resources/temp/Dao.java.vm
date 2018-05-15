@@ -1,6 +1,6 @@
-package ${package}.${moduleName}.dao;
+package ${package}.dao;
 
-import ${package}.${moduleName}.po.${className}Po;
+import ${package}.po.${className}Po;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
