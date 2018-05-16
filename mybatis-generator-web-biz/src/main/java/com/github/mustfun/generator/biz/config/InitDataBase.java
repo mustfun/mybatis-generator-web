@@ -3,6 +3,8 @@ package com.github.mustfun.generator.biz.config;
 import com.alibaba.fastjson.JSON;
 import com.github.mustfun.generator.model.constants.FileConstants;
 import com.github.mustfun.generator.model.po.DbConfigPo;
+import com.github.mustfun.generator.model.po.DbSourcePo;
+import com.github.mustfun.generator.service.DbSourceService;
 import com.github.mustfun.generator.service.ExtApiService;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -30,17 +32,14 @@ public class InitDataBase {
     @Autowired
     private ExtApiService extApiService;
 
+    @Autowired
+    private DbSourceService dbSourceService;
+
     @PostConstruct
     public void initDataBase(){
-        try {
-            List<String> strings = IOUtils.readLines(new FileInputStream(FileConstants.TEMP_DB_CONFIG_DB), "UTF-8");
-            for (String string : strings) {
-                DbConfigPo dbConfigPos = JSON.parseObject(string, DbConfigPo.class);
-                extApiService.initDb(dbConfigPos);
-            }
-            LOG.info("数据库初始化完成....");
-        } catch (IOException e) {
-            LOG.error("{}",e);
+        List<DbSourcePo> dbSourcePos = dbSourceService.queryList();
+        for (DbSourcePo dbSourcePo : dbSourcePos) {
+            extApiService.initDb(dbSourcePo);
         }
     }
 }

@@ -73,7 +73,7 @@
             <form class="col s12" id="myDbForm">
                 <div class="row">
                     <div class="input-field col s12">
-                        <input placeholder="John Doe" id="dbAddress" name="address" type="text">
+                        <input placeholder="John Doe" id="dbAddress" name="dbAddress" type="text">
                         <label  class="active">数据库地址</label>
                     </div>
                 </div>
@@ -137,7 +137,7 @@
             success:function(data,textStatus,jqXHR){
                 if(data['status']=="0"){
                     alert("成功录入");
-                    window.location.href="/dbList";
+                    location.href="/dbList";
                 }else{
                     alert(data['message']);
                 }
