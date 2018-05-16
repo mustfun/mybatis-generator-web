@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.github.mustfun.generator.dao.mapper.TemplateMapper" >
+    <resultMap id="BaseResultMap" type="com.github.mustfun.generator.model.po.Template" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="tep_name" property="tepName" jdbcType="VARCHAR" />
+        <result column="tep_desc" property="tepDesc" jdbcType="VARCHAR" />
+        <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+        <result column="tep_content" property="tepContent" jdbcType="TEXT" />
+        <result column="type" property="type" jdbcType="INTEGER" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        id, tep_name, tep_desc,create_by,tep_content,`type`,create_time
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+
+        select
+        <include refid="Base_Column_List" />
+        from template
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="queryList" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from template
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+
+        delete from template
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="insertSelective" parameterType="com.github.mustfun.generator.model.po.Template" >
+        insert into template
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="tepName != null" >
+                tep_name,
+            </if>
+            <if test="tepContent != null" >
+                tep_content,
+            </if>
+            <if test="tepDesc != null" >
+                tep_desc,
+            </if>
+            <if test="type != null" >
+                `type`,
+            </if>
+            <if test="createBy != null" >
+                create_by,
+            </if>
+            <if test="createTime != null" >
+                create_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id},
+            </if>
+            <if test="tepName != null" >
+                #{tepName},
+            </if>
+            <if test="tepDesc != null" >
+                #{tepDesc},
+            </if>
+            <if test="tepDesc != null" >
+                #{tepDesc},
+            </if>
+            <if test="type != null" >
+                #{type},
+            </if>
+            <if test="createBy != null" >
+                #{type},
+            </if>
+            <if test="createTime != null" >
+                #{type},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.github.mustfun.generator.model.po.Template" >
+
+        update template
+        <set >
+            <if test="id != null" >
+                id = #{id},
+            </if>
+            <if test="tepName != null" >
+                tep_name = #{tepName},
+            </if>
+            <if test="tepContent != null" >
+                tep_content =#{tepContent},
+            </if>
+            <if test="tepDesc != null" >
+                tep_desc=#{tepDesc},
+            </if>
+            <if test="type != null" >
+                `type`=#{type},
+            </if>
+            <if test="createBy != null" >
+                create_by=#{createBy},
+            </if>
+            <if test="createTime != null" >
+                create_time=#{createTime},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>
