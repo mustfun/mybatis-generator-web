@@ -6,7 +6,7 @@
         <result column="tep_name" property="tepName" jdbcType="VARCHAR" />
         <result column="tep_desc" property="tepDesc" jdbcType="VARCHAR" />
         <result column="create_by" property="createBy" jdbcType="VARCHAR" />
-        <result column="tep_content" property="tepContent" jdbcType="TEXT" />
+        <result column="tep_content" property="tepContent" jdbcType="VARCHAR" />
         <result column="type" property="type" jdbcType="INTEGER" />
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     </resultMap>

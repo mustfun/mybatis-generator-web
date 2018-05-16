@@ -6,8 +6,10 @@ import com.github.mustfun.generator.model.constants.FileConstants;
 import com.github.mustfun.generator.model.po.DbConfigPo;
 import com.github.mustfun.generator.model.po.DbSourcePo;
 import com.github.mustfun.generator.model.po.LocalTable;
+import com.github.mustfun.generator.model.po.Template;
 import com.github.mustfun.generator.service.DbSourceService;
 import com.github.mustfun.generator.service.ExtApiService;
+import com.github.mustfun.generator.service.TemplateService;
 import com.github.mustfun.generator.support.handler.ConnectionHolder;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -41,6 +43,9 @@ public class IndexControllerImpl implements IndexController {
     @Autowired
     private DbSourceService dbService;
 
+    @Autowired
+    private TemplateService templateService;
+
     @Override
     @RequestMapping(value = "/index",method = RequestMethod.GET)
     public String index() {
@@ -58,6 +63,14 @@ public class IndexControllerImpl implements IndexController {
         }
         model.addAttribute("dbConfigList", dbSourcePos);
         return "core/dbList";
+    }
+
+    @RequestMapping(value = "/templateList",method = RequestMethod.GET)
+    public String templateList(Model model) {
+        //从数据库中读取
+        List<Template> templates = templateService.queryList();
+        model.addAttribute("templateList", templates);
+        return "core/templateList";
     }
 
     @RequestMapping(value = "/tableList",method = RequestMethod.GET)
