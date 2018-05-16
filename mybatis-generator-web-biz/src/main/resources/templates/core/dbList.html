@@ -31,10 +31,10 @@
                         </tr>
                         </thead>
                         <tbody id="dbListId">
-                        <!--/*@thymesVar id="config" type="com.github.mustfun.generator.model.po.DbConfigPo"*/-->
+                        <!--/*@thymesVar id="config" type="com.github.mustfun.generator.model.po.DbSourcePo"*/-->
                         <tr th:each="config : ${dbConfigList}">
                             <td th:text="${config.dbName}"></td>
-                            <td th:text="${config.address}">Eclair</td>
+                            <td th:text="${config.dbAddress}">Eclair</td>
                             <td th:text="${config.userName}">$0.87</td>
                             <td><a class="btn-floating waves-effect waves-light orange" onclick="chooseThis(this)"><i class="mdi-action-done"></i>选择这个</a></td>
                             <input type="hidden" th:value="${config.toString()}">

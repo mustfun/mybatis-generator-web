@@ -1,6 +1,7 @@
 package com.github.mustfun.generator.biz.facade.impl;
 
 import com.github.mustfun.generator.model.po.DbConfigPo;
+import com.github.mustfun.generator.model.po.DbSourcePo;
 import com.github.mustfun.generator.service.ExtApiService;
 import com.github.mustfun.generator.support.result.BaseResult;
 import org.apache.commons.io.IOUtils;
@@ -32,8 +33,8 @@ public class ExtApiControllerImpl {
 
 
     @RequestMapping(value = "save_db_config",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public BaseResult<Long> saveDbConfig(DbConfigPo configPo) {
-        return extApiService.saveDbConfig(configPo);
+    public BaseResult<Long> saveDbConfig(DbSourcePo dbSourcePo) {
+        return extApiService.saveDbConfig(dbSourcePo);
     }
 
 

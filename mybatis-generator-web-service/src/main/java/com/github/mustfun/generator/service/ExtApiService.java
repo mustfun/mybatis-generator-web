@@ -1,9 +1,8 @@
 package com.github.mustfun.generator.service;
 
-import com.github.mustfun.generator.model.po.DbConfigPo;
+import com.github.mustfun.generator.model.po.DbSourcePo;
 import com.github.mustfun.generator.model.po.LocalTable;
 import com.github.mustfun.generator.support.result.BaseResult;
-
 
 import java.sql.Connection;
 import java.util.List;
@@ -15,11 +14,11 @@ import java.util.List;
  * @since 1.0
  */
 public interface ExtApiService {
-    BaseResult<Long> saveDbConfig(DbConfigPo configPo);
+    BaseResult<Long> saveDbConfig(DbSourcePo dbSourcePo);
 
     List<LocalTable> getTables(Connection connection);
 
-    void initDb(DbConfigPo dbConfigPos);
+    void initDb(DbSourcePo dbConfigPos);
 
     byte[] generateCode(String tableNames,String packageName, String address);
 }

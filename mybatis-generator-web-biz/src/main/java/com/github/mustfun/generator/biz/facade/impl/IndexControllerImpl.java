@@ -50,18 +50,13 @@ public class IndexControllerImpl implements IndexController {
 
     @RequestMapping(value = "/dbList",method = RequestMethod.GET)
     public String dbList(Model model) {
-        try {
-            List<String> strings = IOUtils.readLines(new FileInputStream(FileConstants.TEMP_DB_CONFIG_DB), "UTF-8");
-            List<DbConfigPo> list = new ArrayList<>();
-            for (String string : strings) {
-                DbConfigPo dbConfigPos = JSON.parseObject(string, DbConfigPo.class);
-                list.add(dbConfigPos);
-                extApiService.initDb(dbConfigPos);
-            }
-            model.addAttribute("dbConfigList", list);
-        } catch (IOException e) {
-            LOG.error("{}",e);
+        //List<String> strings = IOUtils.readLines(new FileInputStream(FileConstants.TEMP_DB_CONFIG_DB), "UTF-8");
+        //从数据库中读取
+        List<DbSourcePo> dbSourcePos = dbService.queryList();
+        for (DbSourcePo dbSourcePo : dbSourcePos) {
+            extApiService.initDb(dbSourcePo);
         }
+        model.addAttribute("dbConfigList", dbSourcePos);
         return "core/dbList";
     }
 
@@ -70,12 +65,7 @@ public class IndexControllerImpl implements IndexController {
         LOG.info(key);
         DbConfigPo dbConfigPo = JSON.parseObject(key, DbConfigPo.class);
         //尝试存进数据库中
-        DbSourcePo dbSourcePo = new DbSourcePo();
-        dbSourcePo.setDbAddress(dbConfigPo.getAddress());
-        dbSourcePo.setDbName(dbConfigPo.getDbName());
-        dbSourcePo.setUserName(dbConfigPo.getUserName());
-        dbSourcePo.setPassword(dbConfigPo.getPassword());
-        dbService.saveDbConfig(dbSourcePo);
+
         Connection connection = ConnectionHolder.getConnection(dbConfigPo.getAddress()+dbConfigPo.getDbName());
         List<LocalTable> tables = extApiService.getTables(connection);
         model.addAttribute("tables", tables);

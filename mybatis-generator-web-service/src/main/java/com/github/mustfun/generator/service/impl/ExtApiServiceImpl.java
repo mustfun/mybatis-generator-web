@@ -3,8 +3,10 @@ package com.github.mustfun.generator.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.github.mustfun.generator.model.constants.FileConstants;
 import com.github.mustfun.generator.model.po.DbConfigPo;
+import com.github.mustfun.generator.model.po.DbSourcePo;
 import com.github.mustfun.generator.model.po.LocalColumn;
 import com.github.mustfun.generator.model.po.LocalTable;
+import com.github.mustfun.generator.service.DbSourceService;
 import com.github.mustfun.generator.service.ExtApiService;
 import com.github.mustfun.generator.support.handler.ConnectionHolder;
 import com.github.mustfun.generator.support.result.BaseResult;
@@ -38,11 +40,14 @@ public class ExtApiServiceImpl implements ExtApiService {
 
     private static final Logger LOG = LoggerFactory.getLogger(ExtApiServiceImpl.class);
 
+    @Autowired
+    private DbSourceService dbService;
+
 
     @Override
-    public BaseResult<Long> saveDbConfig(DbConfigPo configPo) {
+    public BaseResult<Long> saveDbConfig(DbSourcePo configPo) {
         BaseResult<Long> baseResult = new BaseResult<>();
-        DbUtil dbUtil = new DbUtil(configPo.getAddress(), configPo.getDbName(), configPo.getUserName(), configPo.getPassword());
+        DbUtil dbUtil = new DbUtil(configPo.getDbAddress(), configPo.getDbName(), configPo.getUserName(), configPo.getPassword());
         Connection connection = dbUtil.getConnection();
         if (connection==null){
             baseResult.setStatus(-2);
@@ -51,7 +56,10 @@ public class ExtApiServiceImpl implements ExtApiService {
         }
         ConnectionHolder.addConnection(configPo.getDbName(),connection);
         //保存到文件中
-        saveToLocalFile(configPo);
+        //saveToLocalFile(configPo);
+        //保存到sqllite中
+        dbService.saveDbConfig(configPo);
+        //保存sqllite成功
         baseResult.setStatus(1);
         baseResult.setMessage("数据库添加成功");
         return baseResult;
@@ -110,16 +118,16 @@ public class ExtApiServiceImpl implements ExtApiService {
      * @param configPo
      */
     @Override
-    public void initDb(DbConfigPo configPo) {
-        if (ConnectionHolder.getConnection(configPo.getAddress()+configPo.getDbName())!=null){
+    public void initDb(DbSourcePo configPo) {
+        if (ConnectionHolder.getConnection(configPo.getDbAddress()+configPo.getDbName())!=null){
             return ;
         }
-        DbUtil dbUtil = new DbUtil(configPo.getAddress(), configPo.getDbName(), configPo.getUserName(), configPo.getPassword());
+        DbUtil dbUtil = new DbUtil(configPo.getDbAddress(), configPo.getDbName(), configPo.getUserName(), configPo.getPassword());
         Connection connection = dbUtil.getConnection();
         if (connection==null){
             return ;
         }
-        ConnectionHolder.addConnection(configPo.getAddress()+configPo.getDbName(),connection);
+        ConnectionHolder.addConnection(configPo.getDbAddress()+configPo.getDbName(),connection);
     }
 
     @Override

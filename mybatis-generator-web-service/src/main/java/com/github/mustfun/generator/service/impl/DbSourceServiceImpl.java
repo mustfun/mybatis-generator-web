@@ -6,6 +6,8 @@ import com.github.mustfun.generator.service.DbSourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Created by dengzhiyuan on 2017/4/6.
  */
@@ -24,5 +26,10 @@ public class DbSourceServiceImpl implements DbSourceService {
     @Override
     public Boolean saveDbConfig(DbSourcePo dbSourcePo) {
         return dbSourceMapper.insertSelective(dbSourcePo)==1;
+    }
+
+    @Override
+    public List<DbSourcePo> queryList() {
+        return dbSourceMapper.queryList();
     }
 }
