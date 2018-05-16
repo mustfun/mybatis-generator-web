@@ -16,7 +16,7 @@ database:
             testOnBorrow: false
             testOnReturn: false
             testWhileIdle: true
-            url: jdbc:sqlite:generate_web.db
+            url: jdbc:sqlite:classpath:generate_web.db
             useUnfairLock: true
             validationQuery: select 1
             validationQueryTimeout: 2000

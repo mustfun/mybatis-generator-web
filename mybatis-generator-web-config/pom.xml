@@ -29,7 +29,7 @@
             <plugin>
                 <groupId>org.mybatis.generator</groupId>
                 <artifactId>mybatis-generator-maven-plugin</artifactId>
-                <version>1.3.0</version>
+                <version>1.3.6</version>
                 <configuration>
                     <!-- 配置configureFile的路径和名称 -->
                     <configurationFile>
