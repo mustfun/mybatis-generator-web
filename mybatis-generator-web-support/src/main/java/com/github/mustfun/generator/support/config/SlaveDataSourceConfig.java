@@ -23,10 +23,10 @@ public class SlaveDataSourceConfig extends AbstractDataSourceConfig{
     @Autowired
     private SlaveDruidConfig slaveDruidConfig;
 
-
-    /**
+/*
+    *//**
      * 这个可以自己注入，也可以让spring帮助我们注入,自己可以注入多个
-     */
+     *//*
     @Bean(name="masterReadDataSource", initMethod = "init", destroyMethod = "close") //也可以为master
     public DataSource masterReadDataSource() throws Exception{
         logger.info("master 读数据库 datasource正在初始化中...");
@@ -37,5 +37,5 @@ public class SlaveDataSourceConfig extends AbstractDataSourceConfig{
     public DataSource slaveReadDataSource() throws Exception{
         logger.info("slave 读数据库 datasource正在初始化中...");
         return initDataBase(slaveDruidConfig);
-    }
+    }*/
 }

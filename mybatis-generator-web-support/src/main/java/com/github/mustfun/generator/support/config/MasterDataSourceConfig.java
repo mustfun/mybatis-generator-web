@@ -26,16 +26,11 @@ public class MasterDataSourceConfig extends AbstractDataSourceConfig{
     /**
      * 这个可以自己注入，也可以让spring帮助我们注入,自己可以注入多个
      */
-    @Bean(name="masterWriteDataSource", initMethod = "init", destroyMethod = "close") //也可以为master
+    @Bean(name="dataSource", initMethod = "init", destroyMethod = "close") //也可以为master
     @Primary  //Spring优先选择被该注解所标记的数据源            //放在这里是因为在初始化的时候必须要指定一个，不然很多地方会注入失败
-    public DataSource masterWriteDataSource() throws Exception{
+    public DataSource dataSource() throws Exception{
         logger.info("master 写数据库 DataSource正在初始化........");
         return initDataBase(druidConfig);
     }
 
-    @Bean(name="slaveWriteDataSource", initMethod = "init", destroyMethod = "close") //也可以为master
-    public DataSource slaveWriteDataSource() throws Exception{
-        logger.info("slave 写数据库 DataSource正在初始化........");
-        return initDataBase(druidConfig);
-    }
 }

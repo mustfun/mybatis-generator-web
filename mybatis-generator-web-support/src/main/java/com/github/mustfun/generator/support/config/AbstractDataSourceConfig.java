@@ -36,6 +36,8 @@ public class AbstractDataSourceConfig {
         datasource.setTimeBetweenEvictionRunsMillis(druidConfig.getTimeBetweenEvictionRunsMillis());
         datasource.setMinEvictableIdleTimeMillis(druidConfig.getMinEvictableIdleTimeMillis());
         datasource.setValidationQuery(druidConfig.getValidationQuery());
+        //sqllite指定
+        datasource.setDbType("sqlserver");
         /*
         datasource.setTestWhileIdle(druidConfig.get);
         datasource.setTestOnBorrow(druidConfig.gette);

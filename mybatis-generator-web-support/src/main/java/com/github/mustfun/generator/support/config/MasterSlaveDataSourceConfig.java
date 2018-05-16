@@ -30,9 +30,9 @@ public class MasterSlaveDataSourceConfig {
 
 
     /**
-     *
+     * sharding-jdbc不支持sqllite
      * @return
-     */
+     *//*
     @Bean(name = "dataSource")
     public DataSource dataSource(){
 
@@ -55,6 +55,6 @@ public class MasterSlaveDataSourceConfig {
             e.printStackTrace();
         }
         return dataSource;
-    }
+    }*/
 }
 

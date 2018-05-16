@@ -5,7 +5,7 @@ database:
     master:
         druid:
             connectionProperties: connectTimeout=3000;config.decrypt=true
-            driverClassName: com.mysql.jdbc.Driver
+            driverClassName: org.sqlite.JDBC
             filters: stat,wall,config
             initialSize: 3
             maxActive: 15
@@ -16,29 +16,8 @@ database:
             testOnBorrow: false
             testOnReturn: false
             testWhileIdle: true
-            url: jdbc:mysql://127.0.0.1:3306/biwann?useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false
+            url: jdbc:sqlite:generate_web.db
             useUnfairLock: true
-            username: root
-            validationQuery: select 1
-            validationQueryTimeout: 2000
-    slave:
-        druid:
-            connectionProperties: connectTimeout=3000;config.decrypt=true
-            driverClassName: com.mysql.jdbc.Driver
-            filters: stat,wall,config
-            initialSize: 3
-            maxActive: 15
-            maxWait: 30000
-            minEvictableIdleTimeMillis: 300000
-            minIdle: 2
-            name: Slave
-            password: bNVOqb7WKLX5Bjnw+LMv92taj25KOxDimXxILPQjw42wgv+1lHzOH8kr97xDwWdhpY67QuYCS7sWN4W46YbkFA==
-            testOnBorrow: false
-            testOnReturn: false
-            testWhileIdle: true
-            url: jdbc:mysql://127.0.0.1:3306/biwann_slave?useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false
-            useUnfairLock: true
-            username: root
             validationQuery: select 1
             validationQueryTimeout: 2000
 logging:
