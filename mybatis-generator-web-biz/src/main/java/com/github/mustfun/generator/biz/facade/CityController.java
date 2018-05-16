@@ -8,9 +8,4 @@ import com.github.mustfun.generator.support.result.BaseResult;
  */
 public interface CityController {
 
-    BaseResult<City> getCity(Integer id);
-
-    BaseResult<Integer> addOneCity(City id);
-
-    BaseResult<City> saveAndGet(City id);
 }
