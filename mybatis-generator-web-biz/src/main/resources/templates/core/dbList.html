@@ -37,7 +37,7 @@
                             <td th:text="${config.dbAddress}">Eclair</td>
                             <td th:text="${config.userName}">$0.87</td>
                             <td><a class="btn-floating waves-effect waves-light orange" onclick="chooseThis(this)"><i class="mdi-action-done"></i>选择这个</a></td>
-                            <input type="hidden" th:value="${config.toString()}">
+                            <input type="hidden"  th:value="${config.id}">
                         </tr>
                         </tbody>
                     </table>
@@ -150,7 +150,7 @@
 
     function chooseThis(data) {
         var value = $(data).closest("tr").find("input").val();
-        return window.location.href="/tableList?key="+encodeURIComponent(value);
+        return window.location.href="/tableList?key="+value;
     }
     
 </script>

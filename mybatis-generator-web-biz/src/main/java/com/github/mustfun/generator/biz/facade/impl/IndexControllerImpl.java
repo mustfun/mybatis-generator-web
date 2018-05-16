@@ -61,15 +61,17 @@ public class IndexControllerImpl implements IndexController {
     }
 
     @RequestMapping(value = "/tableList",method = RequestMethod.GET)
-    public String tableList(Model model,@RequestParam("key") String key) {
-        LOG.info(key);
-        DbConfigPo dbConfigPo = JSON.parseObject(key, DbConfigPo.class);
+    public String tableList(Model model,@RequestParam("key") Integer key) {
+        LOG.info("拿到的数据库ID是{}",key);
         //尝试存进数据库中
-
-        Connection connection = ConnectionHolder.getConnection(dbConfigPo.getAddress()+dbConfigPo.getDbName());
+        if (key==null){
+            throw new RuntimeException("参数不合法");
+        }
+        DbSourcePo dbConfigPo = dbService.getOne(key);
+        Connection connection = ConnectionHolder.getConnection(dbConfigPo.getDbAddress()+dbConfigPo.getDbName());
         List<LocalTable> tables = extApiService.getTables(connection);
         model.addAttribute("tables", tables);
-        model.addAttribute("key", dbConfigPo.getAddress()+dbConfigPo.getDbName());
+        model.addAttribute("key", dbConfigPo.getDbAddress()+dbConfigPo.getDbName());
         return "core/tableList";
     }
 
