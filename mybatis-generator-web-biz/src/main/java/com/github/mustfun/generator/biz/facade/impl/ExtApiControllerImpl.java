@@ -2,6 +2,7 @@ package com.github.mustfun.generator.biz.facade.impl;
 
 import com.github.mustfun.generator.model.po.DbConfigPo;
 import com.github.mustfun.generator.model.po.DbSourcePo;
+import com.github.mustfun.generator.model.po.Template;
 import com.github.mustfun.generator.service.ExtApiService;
 import com.github.mustfun.generator.support.result.BaseResult;
 import org.apache.commons.io.IOUtils;
@@ -9,10 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -35,6 +33,16 @@ public class ExtApiControllerImpl {
     @RequestMapping(value = "save_db_config",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public BaseResult<Long> saveDbConfig(DbSourcePo dbSourcePo) {
         return extApiService.saveDbConfig(dbSourcePo);
+    }
+
+    @RequestMapping(value = "save_template",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public BaseResult<Long> saveTemplate(Template dbSourcePo) {
+        return extApiService.saveTemplate(dbSourcePo);
+    }
+
+    @RequestMapping(value = "delete_template/{id}",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public BaseResult<Boolean> deleteTemplate(@PathVariable("id") Integer dbSourcePo) {
+        return extApiService.deleteTemplate(dbSourcePo);
     }
 
 

@@ -24,12 +24,17 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     @Override
-    public Boolean saveDbConfig(Template dbSourcePo) {
+    public Boolean saveTemplate(Template dbSourcePo) {
         return dbSourceMapper.insertSelective(dbSourcePo)==1;
     }
 
     @Override
     public List<Template> queryList() {
         return dbSourceMapper.queryList();
+    }
+
+    @Override
+    public Boolean deleteTemplate(Integer id) {
+        return dbSourceMapper.deleteByPrimaryKey(id)==1;
     }
 }

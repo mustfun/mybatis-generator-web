@@ -2,6 +2,7 @@ package com.github.mustfun.generator.service;
 
 import com.github.mustfun.generator.model.po.DbSourcePo;
 import com.github.mustfun.generator.model.po.LocalTable;
+import com.github.mustfun.generator.model.po.Template;
 import com.github.mustfun.generator.support.result.BaseResult;
 
 import java.sql.Connection;
@@ -21,4 +22,8 @@ public interface ExtApiService {
     void initDb(DbSourcePo dbConfigPos);
 
     byte[] generateCode(String tableNames,String packageName, String address);
+
+    BaseResult<Long> saveTemplate(Template dbSourcePo);
+
+    BaseResult<Boolean> deleteTemplate(Integer dbSourcePo);
 }

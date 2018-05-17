@@ -11,7 +11,9 @@ import java.util.List;
 public interface TemplateService {
     Template getOne(Integer id);
 
-    Boolean saveDbConfig(Template dbSourcePo);
+    Boolean saveTemplate(Template dbSourcePo);
 
     List<Template> queryList();
+
+    Boolean deleteTemplate(Integer id);
 }

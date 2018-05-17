@@ -1,9 +1,8 @@
 package com.github.mustfun.generator.biz.facade.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.github.mustfun.generator.biz.facade.IndexController;
-import com.github.mustfun.generator.model.constants.FileConstants;
-import com.github.mustfun.generator.model.po.DbConfigPo;
+import com.github.mustfun.generator.model.enums.DbTypeEnums;
+import com.github.mustfun.generator.model.enums.VmTypeEnums;
 import com.github.mustfun.generator.model.po.DbSourcePo;
 import com.github.mustfun.generator.model.po.LocalTable;
 import com.github.mustfun.generator.model.po.Template;
@@ -11,7 +10,6 @@ import com.github.mustfun.generator.service.DbSourceService;
 import com.github.mustfun.generator.service.ExtApiService;
 import com.github.mustfun.generator.service.TemplateService;
 import com.github.mustfun.generator.support.handler.ConnectionHolder;
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.sql.Connection;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -70,6 +65,8 @@ public class IndexControllerImpl implements IndexController {
         //从数据库中读取
         List<Template> templates = templateService.queryList();
         model.addAttribute("templateList", templates);
+        model.addAttribute("vmTypeList", VmTypeEnums.values());
+        model.addAttribute("dbTypeList", DbTypeEnums.values());
         return "core/templateList";
     }
 

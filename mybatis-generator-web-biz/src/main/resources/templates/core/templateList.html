@@ -28,6 +28,7 @@
                             <th data-field="name">模板描述</th>
                             <th data-field="price">创建人</th>
                             <th data-field="price">模板类型</th>
+                            <th data-field="price">数据库类型</th>
                             <th data-field="operation">操作</th>
                         </tr>
                         </thead>
@@ -37,8 +38,13 @@
                             <td th:text="${config.tepName}"></td>
                             <td th:text="${config.tepDesc}">Eclair</td>
                             <td th:text="${config.createBy}">Eclair</td>
-                            <td th:text="${config.type}">$0.87</td>
-                            <td><a class="btn-floating waves-effect waves-light orange" onclick="chooseThis(this)"><i class="mdi-action-done"></i>选择这个</a></td>
+                            <th:block th:each="vm: ${vmTypeList}">
+                                <td th:if="${config.vmType}==${vm.code}" th:text="${vm.getMgs()}">$0.87</td>
+                            </th:block>
+                            <th:block th:each="vm: ${dbTypeList}">
+                                <td th:if="${config.dbType}==${vm.code}" th:text="${vm.getMgs()}">$0.87</td>
+                            </th:block>
+                            <td><a class="btn-floating waves-effect waves-light error" onclick="chooseThis(this)"><i class="mdi-action-delete"></i>选择这个</a></td>
                             <input type="hidden"  th:value="${config.id}">
                         </tr>
                         </tbody>
@@ -71,30 +77,46 @@
     <!-- END MAIN -->
     <div id="modal1" class="modal modal-fixed-footer" tabindex="0" _vimium-has-onclick-listener="" style="z-index: 1003; display: none; opacity: 0; top: 4%; transform: scaleX(0.8) scaleY(0.8);">
         <div class="modal-content">
-            <h4>数据库配置</h4>
+            <h4>模板新增</h4>
             <form class="col s12" id="myDbForm">
                 <div class="row">
                     <div class="input-field col s12">
-                        <input placeholder="John Doe" id="dbAddress" name="dbAddress" type="text">
-                        <label  class="active">数据库地址</label>
+                        <input placeholder="请输入模板名称" id="tepName" name="tepName" type="text">
+                        <label  class="active">模板名称</label>
                     </div>
                 </div>
                 <div class="row">
                     <div class="input-field col s12">
-                        <input placeholder="请输入数据库名称" id="dbName" name="dbName" type="text">
-                        <label  class="active">数据库名称</label>
+                        <input placeholder="请输入模板描述" id="tepDesc" name="tepDesc" type="text">
+                        <label  class="active">模板描述</label>
                     </div>
                 </div>
                 <div class="row">
                     <div class="input-field col s12">
-                        <input placeholder="输入用户名" id="dbUserName" name="userName" type="text">
-                        <label  class="active">用户名</label>
+                        <textarea  class="materialize-textarea" id="tepContent" name="tepContent"></textarea>
+                        <label for="tepContent">请输入模板内容</label>
+                    </div>
+                </div>
+                <div class="row" >
+                    <div class="input-field col s12" >
+                        <select name="vmType">
+                            <option th:each="vmT:${vmTypeList}" th:text="${vmT.getMgs()}" th:value="${vmT.getCode()}"> </option>
+                        </select>
+                        <label>请选择模板类型</label>
                     </div>
                 </div>
                 <div class="row">
                     <div class="input-field col s12">
-                        <input placeholder="请输入密码" id="dbPassword" name="password" type="password">
-                        <label class="active">密码</label>
+                        <select name="dbType">
+                            <option th:each="vmT:${dbTypeList}" th:text="${vmT.getMgs()}" th:value="${vmT.getCode()}"> </option>
+                        </select>
+                        <label>请选择数据库类型</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input placeholder="请输入创建人" id="createBy" name="createBy" type="text">
+                        <label class="active">创建人</label>
                     </div>
                 </div>
             </form>
@@ -116,6 +138,10 @@
     }
 
     $(document).ready(function(){
+        $('select').formSelect();
+    });
+
+    $(document).ready(function(){
         var elem = document.querySelector('.modal');
         moInstance = M.Modal.init(elem);
 
@@ -128,7 +154,7 @@
         $.each(t, function() {
             formData[this.name] = this.value;
         });
-        var url ='/api/save_db_config';
+        var url ='/api/save_template';
         $.ajax({
             url:url,
             type:'POST', //GET
@@ -139,7 +165,7 @@
             success:function(data,textStatus,jqXHR){
                 if(data['status']=="0"){
                     alert("成功录入");
-                    location.href="/dbList";
+                    location.href="/templateList";
                 }else{
                     alert(data['message']);
                 }
@@ -151,8 +177,29 @@
     }
 
     function chooseThis(data) {
+        if (!confirm("确定要删除吗？")){
+            return false;
+        }
         var value = $(data).closest("tr").find("input").val();
-        return window.location.href="/tableList?key="+value;
+        var url ='/api/delete_template/'+value;
+        $.ajax({
+            url:url,
+            type:'GET', //GET
+            async:true,
+            contentType:"application/x-www-form-urlencoded",
+            dataType : "json",
+            success:function(data,textStatus,jqXHR){
+                if(data['status']=="0"){
+                    alert("成功删除");
+                    location.href="/templateList";
+                }else{
+                    alert(data['message']);
+                }
+            },
+            error:function(xhr,textStatus){
+                alert("请求创建失败，请联系开发人员");
+            }
+        })
     }
     
 </script>

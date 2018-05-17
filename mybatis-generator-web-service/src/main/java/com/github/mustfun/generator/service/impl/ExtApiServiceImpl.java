@@ -2,12 +2,10 @@ package com.github.mustfun.generator.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.github.mustfun.generator.model.constants.FileConstants;
-import com.github.mustfun.generator.model.po.DbConfigPo;
-import com.github.mustfun.generator.model.po.DbSourcePo;
-import com.github.mustfun.generator.model.po.LocalColumn;
-import com.github.mustfun.generator.model.po.LocalTable;
+import com.github.mustfun.generator.model.po.*;
 import com.github.mustfun.generator.service.DbSourceService;
 import com.github.mustfun.generator.service.ExtApiService;
+import com.github.mustfun.generator.service.TemplateService;
 import com.github.mustfun.generator.support.handler.ConnectionHolder;
 import com.github.mustfun.generator.support.result.BaseResult;
 import com.github.mustfun.generator.support.util.DbUtil;
@@ -26,6 +24,7 @@ import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.zip.ZipOutputStream;
 
@@ -42,6 +41,9 @@ public class ExtApiServiceImpl implements ExtApiService {
 
     @Autowired
     private DbSourceService dbService;
+
+    @Autowired
+    private TemplateService templateService;
 
 
     @Override
@@ -199,6 +201,22 @@ public class ExtApiServiceImpl implements ExtApiService {
         localTable.setTableName(tableName);
         localTable.setColumnList(localColumns);
         return localTable;
+    }
+
+
+    @Override
+    public BaseResult<Long> saveTemplate(Template dbSourcePo) {
+        dbSourcePo.setCreateTime(new Date());
+        Boolean aBoolean = templateService.saveTemplate(dbSourcePo);
+        return new BaseResult<>();
+    }
+
+    @Override
+    public BaseResult<Boolean> deleteTemplate(Integer id) {
+        Boolean aBoolean = templateService.deleteTemplate(id);
+        BaseResult<Boolean> objectBaseResult = new BaseResult<>();
+        objectBaseResult.setData(aBoolean);
+        return objectBaseResult;
     }
 
 
