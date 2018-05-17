@@ -7,11 +7,12 @@
         <result column="tep_desc" property="tepDesc" jdbcType="VARCHAR" />
         <result column="create_by" property="createBy" jdbcType="VARCHAR" />
         <result column="tep_content" property="tepContent" jdbcType="VARCHAR" />
-        <result column="type" property="type" jdbcType="INTEGER" />
+        <result column="vm_type" property="vmType" jdbcType="INTEGER" />
+        <result column="db_type" property="dbType" jdbcType="INTEGER" />
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     </resultMap>
     <sql id="Base_Column_List" >
-        id, tep_name, tep_desc,create_by,tep_content,`type`,create_time
+        id, tep_name, tep_desc,create_by,tep_content,vm_type,db_type,create_time
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
 
@@ -46,8 +47,11 @@
             <if test="tepDesc != null" >
                 tep_desc,
             </if>
-            <if test="type != null" >
-                `type`,
+            <if test="vmType != null" >
+                vm_type,
+            </if>
+            <if test="dbType != null" >
+                db_type,
             </if>
             <if test="createBy != null" >
                 create_by,
@@ -66,17 +70,20 @@
             <if test="tepDesc != null" >
                 #{tepDesc},
             </if>
-            <if test="tepDesc != null" >
-                #{tepDesc},
+            <if test="tepContent != null" >
+                #{tepContent},
             </if>
-            <if test="type != null" >
-                #{type},
+            <if test="vmType != null" >
+                #{vmType},
+            </if>
+            <if test="dbType != null" >
+                #{dbType},
             </if>
             <if test="createBy != null" >
-                #{type},
+                #{createBy},
             </if>
             <if test="createTime != null" >
-                #{type},
+                #{createTime},
             </if>
         </trim>
     </insert>
@@ -96,8 +103,11 @@
             <if test="tepDesc != null" >
                 tep_desc=#{tepDesc},
             </if>
-            <if test="type != null" >
-                `type`=#{type},
+            <if test="vmType != null" >
+                vm_type=#{vmType},
+            </if>
+            <if test="dbType != null" >
+                db_type=#{dbType},
             </if>
             <if test="createBy != null" >
                 create_by=#{createBy},

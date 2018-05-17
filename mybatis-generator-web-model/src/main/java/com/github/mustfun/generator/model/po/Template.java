@@ -21,6 +21,13 @@ public class Template {
     private String tepDesc;
     private String tepContent;
     private String createBy;
-    private Integer type;
+    /**
+     * 模板类型
+     */
+    private Integer vmType;
+    /**
+     * db类型
+     */
+    private Integer dbType;
     private Date createTime;
 }

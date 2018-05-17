@@ -21,6 +21,7 @@ create table template
   tep_desc varchar(40),
   tep_content TEXT,
   create_by VARCHAR(40),
-  type INTEGER,
+  vm_type INTEGER,
+  db_type INTEGER,
   create_time timestamp
 );
