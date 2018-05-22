@@ -1,0 +1,186 @@
+﻿<!DOCTYPE >
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="common/receource">
+</head>
+
+<body>
+    <header th:include="common/header"></header>
+
+
+    <div id="main">
+        <!-- START WRAPPER -->
+        <div class="wrapper">
+
+            <aside th:include="common/sidebar"></aside>
+
+            <!-- START CONTENT -->
+            <section id="content">
+
+                <div id="breadcrumbs-wrapper" class=" grey lighten-3">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col s12 m12 l12">
+                                <h5 class="breadcrumbs-title">添加模板</h5>
+                                <ol class="breadcrumb">
+                                    <li><a href="templateList">模板管理</a></li>
+                                    <li class="active">添加模板</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!--start container-->
+                <div class="container" style="margin-top: 20px">
+
+                    <form class="col s12" id="myDbForm">
+
+
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <input placeholder="请输入模板名称" id="tepName" name="tepName" type="text">
+                                <label  class="active">模板名称</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <input placeholder="请输入模板描述" id="tepDesc" name="tepDesc" type="text">
+                                <label  class="active">模板描述</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <textarea  class="materialize-textarea" id="tepContent" name="tepContent"></textarea>
+                                <label for="tepContent">请输入模板内容</label>
+                            </div>
+                        </div>
+                        <!--<div class="row" >
+                            <div class="input-field col s12" >
+                                <label>请选择模板类型</label>
+                                <select name="vmType" th:class="browser-default">
+                                    <option th:each="vmT:${vmTypeList}" th:text="${vmT.getMgs()}" th:value="${vmT.getCode()}"> </option>
+                                </select>
+                            </div>
+                        </div>-->
+
+                        <div class="row">
+                            <div class="col s12">
+                            <label>请选择模板类型</label>
+                            <select name="vmType" th:class="browser-default">
+                                <option th:each="vmT:${vmTypeList}" th:text="${vmT.getMgs()}" th:value="${vmT.getCode()}"> </option>
+                            </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class=" col s12">
+                                <label>请选择数据库类型</label>
+                                <select name="dbType" th:class="browser-default">
+                                    <option th:each="vmT:${dbTypeList}" th:text="${vmT.getMgs()}" th:value="${vmT.getCode()}"> </option>
+                                </select>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <input placeholder="请输入创建人" id="createBy" name="createBy" type="text">
+                                <label class="active">创建人</label>
+                            </div>
+                        </div>
+                    </form>
+
+                    <button class="btn waves-effect waves-light " type="button"  onclick="return submitDBConfig();">提交</button>
+
+
+                </div>
+                <!--end container-->
+            </section>
+            <!-- END CONTENT -->
+
+
+            <aside th:include="common/rightSidebar"></aside>
+
+        </div>
+
+
+    </div>
+
+    <footer th:include="common/footer"></footer>
+
+    <div th:include="common/scripts"></div>
+</body>
+<script>
+    var moInstance;
+    function addDbConfig() {
+        moInstance.open();
+    }
+
+    $(document).ready(function(){
+        $('select').formSelect();
+    });
+
+    $(document).ready(function(){
+        var elem = document.querySelector('.modal');
+        moInstance = M.Modal.init(elem);
+
+        $('.modal').modal();
+    });
+    
+    function submitDBConfig() {
+        var formData={};
+        var t = $('#myDbForm').serializeArray();
+        $.each(t, function() {
+            formData[this.name] = this.value;
+        });
+        var url ='/api/save_template';
+        $.ajax({
+            url:url,
+            type:'POST', //GET
+            async:true,    //或false,是否异步
+            data:formData,
+            contentType:"application/x-www-form-urlencoded",
+            dataType : "json",
+            success:function(data,textStatus,jqXHR){
+                if(data['status']=="0"){
+                    alert("成功录入");
+                    location.href="/templateList";
+                }else{
+                    alert(data['message']);
+                }
+            },
+            error:function(xhr,textStatus){
+                alert("请求创建失败，请联系开发人员");
+            }
+        })
+    }
+
+    function chooseThis(data) {
+        if (!confirm("确定要删除吗？")){
+            return false;
+        }
+        var value = $(data).closest("tr").find("input").val();
+        var url ='/api/delete_template/'+value;
+        $.ajax({
+            url:url,
+            type:'GET', //GET
+            async:true,
+            contentType:"application/x-www-form-urlencoded",
+            dataType : "json",
+            success:function(data,textStatus,jqXHR){
+                if(data['status']=="0"){
+                    alert("成功删除");
+                    location.href="/templateList";
+                }else{
+                    alert(data['message']);
+                }
+            },
+            error:function(xhr,textStatus){
+                alert("请求创建失败，请联系开发人员");
+            }
+        })
+    }
+    
+</script>
+</html>

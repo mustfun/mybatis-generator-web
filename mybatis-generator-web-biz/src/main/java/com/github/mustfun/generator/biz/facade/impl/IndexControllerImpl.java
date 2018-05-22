@@ -1,6 +1,5 @@
 package com.github.mustfun.generator.biz.facade.impl;
 
-import com.github.mustfun.generator.biz.facade.IndexController;
 import com.github.mustfun.generator.model.enums.DbTypeEnums;
 import com.github.mustfun.generator.model.enums.VmTypeEnums;
 import com.github.mustfun.generator.model.po.DbSourcePo;
@@ -15,7 +14,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.sql.Connection;
 import java.util.List;
@@ -28,7 +29,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/")
-public class IndexControllerImpl implements IndexController {
+public class IndexControllerImpl{
 
     private static final Logger LOG = LoggerFactory.getLogger(IndexControllerImpl.class);
 
@@ -41,7 +42,7 @@ public class IndexControllerImpl implements IndexController {
     @Autowired
     private TemplateService templateService;
 
-    @Override
+
     @RequestMapping(value = "/index",method = RequestMethod.GET)
     public String index() {
         return "core/index";
@@ -69,6 +70,16 @@ public class IndexControllerImpl implements IndexController {
         model.addAttribute("dbTypeList", DbTypeEnums.values());
         return "core/templateList";
     }
+
+    @RequestMapping(value = "/addTemplate",method = RequestMethod.GET)
+    public String addTemplate(Model model) {
+        List<Template> templates = templateService.queryList();
+        model.addAttribute("templateList", templates);
+        model.addAttribute("vmTypeList", VmTypeEnums.values());
+        model.addAttribute("dbTypeList", DbTypeEnums.values());
+        return "core/addTemplate";
+    }
+
 
     @RequestMapping(value = "/tableList",method = RequestMethod.GET)
     public String tableList(Model model,@RequestParam("key") Integer key) {
