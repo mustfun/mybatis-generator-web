@@ -93,6 +93,8 @@ public class IndexControllerImpl{
         List<LocalTable> tables = extApiService.getTables(connection);
         model.addAttribute("tables", tables);
         model.addAttribute("key", dbConfigPo.getDbAddress()+dbConfigPo.getDbName());
+        List<Template> templates = templateService.queryList();
+        model.addAttribute("templates", templates);
         return "core/tableList";
     }
 

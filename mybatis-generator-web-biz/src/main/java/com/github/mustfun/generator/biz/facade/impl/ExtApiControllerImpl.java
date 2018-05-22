@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @author dengzhiyuan
@@ -47,9 +48,10 @@ public class ExtApiControllerImpl {
 
 
     @RequestMapping(value = "generate_code",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public void generateCode(@RequestParam("tableName") String tableNames,@RequestParam("packageName") String packageName,
-                               @RequestParam("address")String address, HttpServletResponse response) {
-        byte[] data = extApiService.generateCode(tableNames,packageName, address);
+    public void generateCode(@RequestParam("tableName") List<String> tableNames,@RequestParam("packageName") String packageName,
+                               @RequestParam("address")String address,@RequestParam("vmList")List<String> vmList,
+                             HttpServletResponse response) {
+        byte[] data = extApiService.generateCode(tableNames,packageName, address,vmList);
         response.reset();
         response.setHeader("Content-Disposition", "attachment; filename=\"generator-web.zip\"");
         response.addHeader("Content-Length", "" + data.length);

@@ -21,7 +21,7 @@ public interface ExtApiService {
 
     void initDb(DbSourcePo dbConfigPos);
 
-    byte[] generateCode(String tableNames,String packageName, String address);
+    byte[] generateCode(List<String> tableNames, String packageName, String address, List<String> vmList);
 
     BaseResult<Long> saveTemplate(Template dbSourcePo);
 

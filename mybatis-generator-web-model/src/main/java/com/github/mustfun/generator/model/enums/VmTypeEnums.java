@@ -9,9 +9,14 @@ package com.github.mustfun.generator.model.enums;
 public enum  VmTypeEnums {
     DAO(1,"DAO层"),
     CONTROLLER(2,"Controller层"),
+    CONTROLLER_IMPL(10,"ControllerImpl实现层"),
     SERVICE(3,"Service层"),
+    SERVICE_IMPL(9,"ServiceImpl实现层"),
     MAPPER(4,"Mapper文件"),
-    MODEL(5,"Model层");
+    MODEL_PO(5,"Po层"),
+    MODEL_BO(6,"Bo层"),
+    MODEL_REQ(7,"请求Model层"),
+    MODEL_RESP(8,"返回Model层");
 
     private Integer code;
     private String  mgs;

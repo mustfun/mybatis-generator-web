@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -133,13 +132,12 @@ public class ExtApiServiceImpl implements ExtApiService {
     }
 
     @Override
-    public byte[] generateCode(String tableNames,String packageName,String address) {
-        String[] split = tableNames.trim().split(",");
+    public byte[] generateCode(List<String> tableNames, String packageName, String address, List<String> vmList) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         try {
             try (ZipOutputStream zip = new ZipOutputStream(outputStream)) {
                 Connection connection = ConnectionHolder.getConnection(address);
-                for (String s : split) {
+                for (String s : tableNames) {
                     LOG.info("需要生成代码的表{}",s);
                     LocalTable table = new LocalTable();
                     ResultSet rs = connection.getMetaData().getTables(null,null,s, new String[]{"TABLE","VIEW"});
