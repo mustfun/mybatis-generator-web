@@ -130,7 +130,7 @@ public class GenerateCodeService {
             try (StringWriter sw = new StringWriter()) {
 
                 repo.putStringResource(template.getTepName()+"_"+template.getId(), template.getTepContent());
-                Template tpl = engine.getTemplate(template.getTepName()+"_"+template.getId());
+                Template tpl = engine.getTemplate(template.getTepName()+"_"+template.getId(),"UTF-8");
                 tpl.merge(context, sw);
 
                     if (packageName==null||StringUtils.isEmpty(packageName)){
