@@ -118,12 +118,13 @@ public class GenerateCodeService {
 
         //获取模板列表
         for (Integer templateId : vmList) {
-            if(!checkNeedGenerate(templateId)){
-                continue;
-            }
             //取出模板
             TemplateServiceImpl templateService = SpringContextHolder.getBean(TemplateServiceImpl.class);
             com.github.mustfun.generator.model.po.Template template = templateService.getOne(templateId);
+
+            if(!checkNeedGenerate(template.getVmType())){
+                continue;
+            }
 
             //渲染模板
             try (StringWriter sw = new StringWriter()) {
@@ -136,7 +137,7 @@ public class GenerateCodeService {
                         packageName = config.getString("package");
                     }
                     //添加到zip
-                    zip.putNextEntry(new ZipEntry(Objects.requireNonNull(getFileName(templateId, table.getClassName(), packageName))));
+                    zip.putNextEntry(new ZipEntry(Objects.requireNonNull(getFileName(template.getVmType(), table.getClassName(), packageName))));
                     IOUtils.write(sw.toString(), zip, "UTF-8");
                     zip.closeEntry();
 
