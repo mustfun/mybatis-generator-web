@@ -132,7 +132,7 @@ public class ExtApiServiceImpl implements ExtApiService {
     }
 
     @Override
-    public byte[] generateCode(List<String> tableNames, String packageName, String address, List<String> vmList) {
+    public byte[] generateCode(List<String> tableNames, String packageName, String address, List<Integer> vmList) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         try {
             try (ZipOutputStream zip = new ZipOutputStream(outputStream)) {
@@ -145,7 +145,7 @@ public class ExtApiServiceImpl implements ExtApiService {
                         table = initLocalTable(connection, rs);
                     }
                     //生成代码啦，替换模板
-                    generateCodeUseTemplate(table,zip,packageName);
+                    generateCodeUseTemplate(table,zip,packageName,vmList);
                 }
             }
         } catch (Exception e) {
@@ -158,9 +158,10 @@ public class ExtApiServiceImpl implements ExtApiService {
      * 用模板生成代码
      * @param columns
      * @param zip
+     * @param vmList
      */
-    private void generateCodeUseTemplate(LocalTable columns, ZipOutputStream zip,String packageName) {
-        GenerateCodeService.generatorCode(columns,columns.getColumnList(),zip,packageName);
+    private void generateCodeUseTemplate(LocalTable columns, ZipOutputStream zip, String packageName, List<Integer> vmList) {
+        GenerateCodeService.generatorCode(columns,columns.getColumnList(),zip,packageName,vmList);
     }
 
     private LocalTable getColumns(DatabaseMetaData meta, String tableName,LocalTable localTable) throws SQLException {

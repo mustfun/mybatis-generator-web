@@ -16,7 +16,8 @@ public enum  VmTypeEnums {
     MODEL_PO(5,"Po层"),
     MODEL_BO(6,"Bo层"),
     MODEL_REQ(7,"请求Model层"),
-    MODEL_RESP(8,"返回Model层");
+    MODEL_RESP(8,"返回Model层"),
+    RESULT(11,"Result层");
 
     private Integer code;
     private String  mgs;

@@ -49,7 +49,7 @@ public class ExtApiControllerImpl {
 
     @RequestMapping(value = "generate_code",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public void generateCode(@RequestParam("tableName") List<String> tableNames,@RequestParam("packageName") String packageName,
-                               @RequestParam("address")String address,@RequestParam("vmList")List<String> vmList,
+                               @RequestParam("address")String address,@RequestParam("vmList")List<Integer> vmList,
                              HttpServletResponse response) {
         byte[] data = extApiService.generateCode(tableNames,packageName, address,vmList);
         response.reset();

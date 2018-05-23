@@ -1,7 +1,9 @@
 package com.github.mustfun.generator.service.impl;
 
+import com.github.mustfun.generator.model.enums.VmTypeEnums;
 import com.github.mustfun.generator.model.po.LocalColumn;
 import com.github.mustfun.generator.model.po.LocalTable;
+import com.github.mustfun.generator.support.handler.SpringContextHolder;
 import com.github.mustfun.generator.support.util.DateUtils;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
@@ -12,11 +14,19 @@ import org.apache.commons.lang.WordUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
+import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.runtime.RuntimeConstants;
+import org.apache.velocity.runtime.RuntimeServices;
+import org.apache.velocity.runtime.RuntimeSingleton;
+import org.apache.velocity.runtime.parser.ParseException;
+import org.apache.velocity.runtime.resource.loader.StringResourceLoader;
+import org.apache.velocity.runtime.resource.util.StringResourceRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -34,28 +44,13 @@ public class GenerateCodeService {
 
     private static final Logger LOG = LoggerFactory.getLogger(GenerateCodeService.class);
 
-    private static ConcurrentHashMap<String, Integer> templateGenerateTimeMap = new ConcurrentHashMap<>(10);
-
-    public static List<String> getTemplates(){
-        List<String> templates = new ArrayList<>();
-        templates.add("temp/Result.java.vm");
-        templates.add("temp/Po.java.vm");
-        templates.add("temp/Bo.java.vm");
-        templates.add("temp/Req.java.vm");
-        templates.add("temp/Resp.java.vm");
-        templates.add("temp/Dao.java.vm");
-        templates.add("temp/Dao.xml.vm");
-        templates.add("temp/Service.java.vm");
-        templates.add("temp/ServiceImpl.java.vm");
-        templates.add("temp/Controller.java.vm");
-        return templates;
-    }
+    private static ConcurrentHashMap<Integer, Integer> templateGenerateTimeMap = new ConcurrentHashMap<>(10);
 
     /**
      * 生成代码
      */
     public static void generatorCode(LocalTable table,
-                                     List<LocalColumn> columns, ZipOutputStream zip,String packageName) {
+                                     List<LocalColumn> columns, ZipOutputStream zip, String packageName, List<Integer> vmList) {
         //配置信息
         Configuration config = getConfig();
         boolean hasBigDecimal = false;
@@ -93,9 +88,15 @@ public class GenerateCodeService {
         }
 
         //设置velocity资源加载器
-        Properties prop = new Properties();
-        prop.put("file.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader" );
-        Velocity.init(prop);
+        VelocityEngine engine = new VelocityEngine();
+        engine.setProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS, "org.apache.velocity.runtime.log.Log4JLogChute");
+        engine.setProperty(Velocity.RESOURCE_LOADER, "string");
+        engine.addProperty("string.resource.loader.class", StringResourceLoader.class.getName());
+        engine.addProperty("string.resource.loader.repository.static", "false");
+        //  engine.addProperty("string.resource.loader.modificationCheckInterval", "1");
+        engine.init();
+        StringResourceRepository repo = (StringResourceRepository) engine.getApplicationAttribute(StringResourceLoader.REPOSITORY_NAME_DEFAULT);
+
         String mainPath = config.getString("mainPath" );
         mainPath = StringUtils.isBlank(mainPath) ? "com.generator" : mainPath;
         //封装模板数据
@@ -116,22 +117,26 @@ public class GenerateCodeService {
         VelocityContext context = new VelocityContext(map);
 
         //获取模板列表
-        List<String> templates = getTemplates();
-        for (String template : templates) {
-            if(!checkNeedGenerate(template)){
+        for (Integer templateId : vmList) {
+            if(!checkNeedGenerate(templateId)){
                 continue;
             }
+            //取出模板
+            TemplateServiceImpl templateService = SpringContextHolder.getBean(TemplateServiceImpl.class);
+            com.github.mustfun.generator.model.po.Template template = templateService.getOne(templateId);
 
             //渲染模板
             try (StringWriter sw = new StringWriter()) {
-                Template tpl = Velocity.getTemplate(template, "UTF-8");
+
+                repo.putStringResource(template.getTepName()+"_"+template.getId(), template.getTepContent());
+                Template tpl = engine.getTemplate(template.getTepName()+"_"+template.getId());
                 tpl.merge(context, sw);
 
                     if (packageName==null||StringUtils.isEmpty(packageName)){
                         packageName = config.getString("package");
                     }
                     //添加到zip
-                    zip.putNextEntry(new ZipEntry(Objects.requireNonNull(getFileName(template, table.getClassName(), packageName))));
+                    zip.putNextEntry(new ZipEntry(Objects.requireNonNull(getFileName(templateId, table.getClassName(), packageName))));
                     IOUtils.write(sw.toString(), zip, "UTF-8");
                     zip.closeEntry();
 
@@ -142,8 +147,8 @@ public class GenerateCodeService {
         }
     }
 
-    private  static boolean checkNeedGenerate(String template) {
-        if (template.contains("Result.java.vm")){
+    private  static boolean checkNeedGenerate(Integer template) {
+        if (template.equals(VmTypeEnums.RESULT.getCode())){
             Integer integer = templateGenerateTimeMap.get(template);
             if (integer==null){
                 templateGenerateTimeMap.put(template,1);
@@ -186,49 +191,49 @@ public class GenerateCodeService {
     /**
      * 获取文件名
      */
-    public static String getFileName(String template, String className, String packageName) {
+    public static String getFileName(Integer template, String className, String packageName) {
         String packagePath = "java" + File.separator;
         if (StringUtils.isNotBlank(packageName)) {
             packagePath += packageName.replace(".", File.separator) + File.separator;
         }
-        if (template.contains("Result.java.vm")) {
+        if (template.equals(VmTypeEnums.RESULT.getCode())) {
             return packagePath +"model" + File.separator + "Result.java";
         }
 
-        if (template.contains("Po.java.vm" )) {
+        if (template.equals(VmTypeEnums.MODEL_PO.getCode())) {
             return packagePath +"model"+ File.separator + "po" + File.separator + className + "Po.java";
         }
 
-        if (template.contains("Bo.java.vm" )) {
+        if (template.equals(VmTypeEnums.MODEL_BO.getCode())) {
             return packagePath +"model"+ File.separator + "bo" + File.separator + className + "Bo.java";
         }
 
-        if (template.contains("Req.java.vm" )) {
+        if (template.equals(VmTypeEnums.MODEL_REQ.getCode())) {
             return packagePath +"model"+ File.separator + "req" + File.separator + className + "Req.java";
         }
 
-        if (template.contains("Resp.java.vm" )) {
+        if (template.equals(VmTypeEnums.MODEL_RESP.getCode())) {
             return packagePath +"model"+ File.separator + "resp" + File.separator + className + "Resp.java";
         }
 
 
-        if (template.contains("Dao.java.vm" )) {
+        if (template.equals(VmTypeEnums.DAO.getCode())) {
             return packagePath + "dao" + File.separator + className + "Dao.java";
         }
 
-        if (template.contains("Service.java.vm" )) {
+        if (template.equals(VmTypeEnums.SERVICE.getCode())) {
             return packagePath + "service" + File.separator + className + "Service.java";
         }
 
-        if (template.contains("ServiceImpl.java.vm" )) {
+        if (template.equals(VmTypeEnums.SERVICE_IMPL.getCode())) {
             return packagePath + "service" + File.separator + "impl" + File.separator + className + "ServiceImpl.java";
         }
 
-        if (template.contains("Controller.java.vm" )) {
+        if (template.equals(VmTypeEnums.CONTROLLER.getCode())) {
             return packagePath + "controller" + File.separator + className + "Controller.java";
         }
 
-        if (template.contains("Dao.xml.vm" )) {
+        if (template.equals(VmTypeEnums.MAPPER.getCode())) {
             return "mybatis" +File.separator + "mappers" + File.separator + className + "Dao.xml";
         }
 
