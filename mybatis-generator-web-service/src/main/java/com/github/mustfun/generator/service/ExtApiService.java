@@ -26,4 +26,6 @@ public interface ExtApiService {
     BaseResult<Long> saveTemplate(Template dbSourcePo);
 
     BaseResult<Boolean> deleteTemplate(Integer dbSourcePo);
+
+    BaseResult<Boolean> updateTemplate(Template template);
 }

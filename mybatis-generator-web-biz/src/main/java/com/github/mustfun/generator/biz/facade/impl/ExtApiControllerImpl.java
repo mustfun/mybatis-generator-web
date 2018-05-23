@@ -46,6 +46,11 @@ public class ExtApiControllerImpl {
         return extApiService.deleteTemplate(dbSourcePo);
     }
 
+    @RequestMapping(value = "update_template/{id}",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public BaseResult<Boolean> updateTemplate(Template template) {
+        return extApiService.updateTemplate(template);
+    }
+
 
     @RequestMapping(value = "generate_code",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public void generateCode(@RequestParam("tableName") List<String> tableNames,@RequestParam("packageName") String packageName,

@@ -16,4 +16,6 @@ public interface TemplateService {
     List<Template> queryList();
 
     Boolean deleteTemplate(Integer id);
+
+    Boolean updateTemplate(Template template);
 }

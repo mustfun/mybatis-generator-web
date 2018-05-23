@@ -37,4 +37,9 @@ public class TemplateServiceImpl implements TemplateService {
     public Boolean deleteTemplate(Integer id) {
         return dbSourceMapper.deleteByPrimaryKey(id)==1;
     }
+
+    @Override
+    public Boolean updateTemplate(Template template) {
+        return dbSourceMapper.updateByPrimaryKeySelective(template)==1;
+    }
 }

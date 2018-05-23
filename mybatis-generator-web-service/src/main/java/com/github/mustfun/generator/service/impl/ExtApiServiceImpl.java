@@ -218,5 +218,13 @@ public class ExtApiServiceImpl implements ExtApiService {
         return objectBaseResult;
     }
 
+    @Override
+    public BaseResult<Boolean> updateTemplate(Template template) {
+        Boolean aBoolean = templateService.updateTemplate(template);
+        BaseResult<Boolean> objectBaseResult = new BaseResult<>();
+        objectBaseResult.setData(aBoolean);
+        return objectBaseResult;
+    }
+
 
 }
