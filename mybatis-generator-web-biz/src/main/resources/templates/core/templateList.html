@@ -44,7 +44,10 @@
                             <th:block th:each="vm: ${dbTypeList}">
                                 <td th:if="${config.dbType}==${vm.code}" th:text="${vm.getMgs()}">$0.87</td>
                             </th:block>
-                            <td><a class="btn-floating waves-effect waves-light error" onclick="chooseThis(this)"><i class="mdi-action-delete"></i>选择这个</a></td>
+                            <td>
+                                <a class="btn-floating waves-effect waves-light red" onclick="updateTemplate(this)"><i class="mdi-editor-mode-edit"></i></a>
+                                <a class="btn-floating waves-effect waves-light error" onclick="chooseThis(this)"><i class="mdi-action-delete"></i>选择这个</a>
+                            </td>
                             <input type="hidden"  th:value="${config.id}">
                         </tr>
                         </tbody>
@@ -75,57 +78,7 @@
 
     </div>
     <!-- END MAIN -->
-    <div id="modal1" class="modal modal-fixed-footer" tabindex="0" _vimium-has-onclick-listener="" style="z-index: 1003; display: none; opacity: 0; top: 4%; transform: scaleX(0.8) scaleY(0.8);">
-        <div class="modal-content">
-            <h4>模板新增</h4>
-            <form class="col s12" id="myDbForm">
-                <div class="row">
-                    <div class="input-field col s12">
-                        <input placeholder="请输入模板名称" id="tepName" name="tepName" type="text">
-                        <label  class="active">模板名称</label>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="input-field col s12">
-                        <input placeholder="请输入模板描述" id="tepDesc" name="tepDesc" type="text">
-                        <label  class="active">模板描述</label>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="input-field col s12">
-                        <textarea  class="materialize-textarea" id="tepContent" name="tepContent"></textarea>
-                        <label for="tepContent">请输入模板内容</label>
-                    </div>
-                </div>
-                <div class="row" >
-                    <div class="input-field col s12" >
-                        <select name="vmType">
-                            <option th:each="vmT:${vmTypeList}" th:text="${vmT.getMgs()}" th:value="${vmT.getCode()}"> </option>
-                        </select>
-                        <label>请选择模板类型</label>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="input-field col s12">
-                        <select name="dbType">
-                            <option th:each="vmT:${dbTypeList}" th:text="${vmT.getMgs()}" th:value="${vmT.getCode()}"> </option>
-                        </select>
-                        <label>请选择数据库类型</label>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="input-field col s12">
-                        <input placeholder="请输入创建人" id="createBy" name="createBy" type="text">
-                        <label class="active">创建人</label>
-                    </div>
-                </div>
-            </form>
-        </div>
-        <div class="modal-footer">
-            <a href="#!" class="modal-action modal-close waves-effect waves-red btn-flat " onclick="moInstance.close()">取消</a>
-            <a href="#!" class="modal-action  waves-effect waves-green btn-flat " onclick="return submitDBConfig();">提交</a>
-        </div>
-    </div>
+
 
     <footer th:include="common/footer"></footer>
 
@@ -148,9 +101,11 @@
 
         $('.modal').modal();
     });
-    
-    function submitDBConfig() {
 
+
+    function updateTemplate(data) {
+        var value = $(data).closest("tr").find("input").val();
+        location.href="/updateTemplate/"+value;
     }
 
     function chooseThis(data) {

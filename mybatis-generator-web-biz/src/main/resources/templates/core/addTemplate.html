@@ -40,36 +40,28 @@
 
                         <div class="row">
                             <div class="input-field col s12">
-                                <input placeholder="请输入模板名称" id="tepName" name="tepName" type="text">
+                                <input placeholder="请输入模板名称" id="tepName" name="tepName" th:value="${template.tepName}" type="text">
                                 <label  class="active">模板名称</label>
                             </div>
                         </div>
                         <div class="row">
                             <div class="input-field col s12">
-                                <input placeholder="请输入模板描述" id="tepDesc" name="tepDesc" type="text">
+                                <input placeholder="请输入模板描述" id="tepDesc" name="tepDesc" th:value="${template.tepDesc}" type="text">
                                 <label  class="active">模板描述</label>
                             </div>
                         </div>
                         <div class="row">
                             <div class="input-field col s12">
-                                <textarea  class="materialize-textarea" id="tepContent" name="tepContent"></textarea>
+                                <textarea  class="materialize-textarea" id="tepContent" th:value="${template.getTepContent()}" name="tepContent"></textarea>
                                 <label for="tepContent">请输入模板内容</label>
                             </div>
                         </div>
-                        <!--<div class="row" >
-                            <div class="input-field col s12" >
-                                <label>请选择模板类型</label>
-                                <select name="vmType" th:class="browser-default">
-                                    <option th:each="vmT:${vmTypeList}" th:text="${vmT.getMgs()}" th:value="${vmT.getCode()}"> </option>
-                                </select>
-                            </div>
-                        </div>-->
 
                         <div class="row">
                             <div class="col s12">
                             <label>请选择模板类型</label>
                             <select name="vmType" th:class="browser-default">
-                                <option th:each="vmT:${vmTypeList}" th:text="${vmT.getMgs()}" th:value="${vmT.getCode()}"> </option>
+                                <option th:each="vmT:${vmTypeList}" th:selected="${vmT.getCode()}==${template.vmType}" th:text="${vmT.getMgs()}" th:value="${vmT.getCode()}"> </option>
                             </select>
                             </div>
                         </div>
@@ -78,14 +70,14 @@
                             <div class=" col s12">
                                 <label>请选择数据库类型</label>
                                 <select name="dbType" th:class="browser-default">
-                                    <option th:each="vmT:${dbTypeList}" th:text="${vmT.getMgs()}" th:value="${vmT.getCode()}"> </option>
+                                    <option th:each="vmT:${dbTypeList}" th:text="${vmT.getMgs()}" th:selected="${vmT.getCode()}==${template.getDbType()}" th:value="${vmT.getCode()}"> </option>
                                 </select>
 
                             </div>
                         </div>
                         <div class="row">
                             <div class="input-field col s12">
-                                <input placeholder="请输入创建人" id="createBy" name="createBy" type="text">
+                                <input placeholder="请输入创建人" id="createBy" name="createBy" type="text" th:value="${template.createBy}">
                                 <label class="active">创建人</label>
                             </div>
                         </div>
@@ -113,9 +105,7 @@
 </body>
 <script>
     var moInstance;
-    function addDbConfig() {
-        moInstance.open();
-    }
+
 
     $(document).ready(function(){
         $('select').formSelect();
@@ -145,32 +135,6 @@
             success:function(data,textStatus,jqXHR){
                 if(data['status']=="0"){
                     alert("成功录入");
-                    location.href="/templateList";
-                }else{
-                    alert(data['message']);
-                }
-            },
-            error:function(xhr,textStatus){
-                alert("请求创建失败，请联系开发人员");
-            }
-        })
-    }
-
-    function chooseThis(data) {
-        if (!confirm("确定要删除吗？")){
-            return false;
-        }
-        var value = $(data).closest("tr").find("input").val();
-        var url ='/api/delete_template/'+value;
-        $.ajax({
-            url:url,
-            type:'GET', //GET
-            async:true,
-            contentType:"application/x-www-form-urlencoded",
-            dataType : "json",
-            success:function(data,textStatus,jqXHR){
-                if(data['status']=="0"){
-                    alert("成功删除");
                     location.href="/templateList";
                 }else{
                     alert(data['message']);

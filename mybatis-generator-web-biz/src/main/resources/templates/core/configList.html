@@ -1,0 +1,126 @@
+﻿<!DOCTYPE >
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="common/receource">
+</head>
+
+<body>
+    <header th:include="common/header"></header>
+
+
+    <div id="main">
+        <!-- START WRAPPER -->
+        <div class="wrapper">
+
+            <aside th:include="common/sidebar"></aside>
+
+            <!-- START CONTENT -->
+            <section id="content">
+
+                <div id="breadcrumbs-wrapper" class=" grey lighten-3">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col s12 m12 l12">
+                                <h5 class="breadcrumbs-title">系统配置</h5>
+                                <ol class="breadcrumb">
+                                    <li><a href="templateList">系统配置</a></li>
+                                    <li class="active">配置列表</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="container">
+                    预计加入一些常用的配置，待完善，如作者、日期，默认包名、默认路径等
+                </div>
+                <!--end container-->
+            </section>
+            <!-- END CONTENT -->
+
+
+            <aside th:include="common/rightSidebar"></aside>
+
+        </div>
+
+
+    </div>
+
+    <footer th:include="common/footer"></footer>
+
+    <div th:include="common/scripts"></div>
+</body>
+<script>
+    var moInstance;
+    function addDbConfig() {
+        moInstance.open();
+    }
+
+    $(document).ready(function(){
+        $('select').formSelect();
+    });
+
+    $(document).ready(function(){
+        var elem = document.querySelector('.modal');
+        moInstance = M.Modal.init(elem);
+
+        $('.modal').modal();
+    });
+    
+    function submitDBConfig() {
+        var formData={};
+        var t = $('#myDbForm').serializeArray();
+        $.each(t, function() {
+            formData[this.name] = this.value;
+        });
+        var url ='/api/save_template';
+        $.ajax({
+            url:url,
+            type:'POST', //GET
+            async:true,    //或false,是否异步
+            data:formData,
+            contentType:"application/x-www-form-urlencoded",
+            dataType : "json",
+            success:function(data,textStatus,jqXHR){
+                if(data['status']=="0"){
+                    alert("成功录入");
+                    location.href="/templateList";
+                }else{
+                    alert(data['message']);
+                }
+            },
+            error:function(xhr,textStatus){
+                alert("请求创建失败，请联系开发人员");
+            }
+        })
+    }
+
+    function chooseThis(data) {
+        if (!confirm("确定要删除吗？")){
+            return false;
+        }
+        var value = $(data).closest("tr").find("input").val();
+        var url ='/api/delete_template/'+value;
+        $.ajax({
+            url:url,
+            type:'GET', //GET
+            async:true,
+            contentType:"application/x-www-form-urlencoded",
+            dataType : "json",
+            success:function(data,textStatus,jqXHR){
+                if(data['status']=="0"){
+                    alert("成功删除");
+                    location.href="/templateList";
+                }else{
+                    alert(data['message']);
+                }
+            },
+            error:function(xhr,textStatus){
+                alert("请求创建失败，请联系开发人员");
+            }
+        })
+    }
+    
+</script>
+</html>
