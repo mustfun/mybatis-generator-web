@@ -214,7 +214,7 @@
 
 
     <properties>
-        <springboot.version>2.0.0.RELEASE</springboot.version>
+        <springboot.version>2.5.12</springboot.version>
         <junit.version>4.12</junit.version>
         <jdk.version>1.8</jdk.version>
     </properties>
